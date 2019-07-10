@@ -4,15 +4,24 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 /**
- * Config class which holds all the command line options
+ * Config class which holds all the command line options and its values
  */
 
-@Parameters(separators = "=",commandDescription = "Command line Arguments")
+@Parameters(separators = "=",commandDescription = "Latency Monitor")
 public class Config {
 
-    enum TimeStampType {
+    /*
+        Time stamp, Software or Hardware
+    */
+
+    public enum TimeStampType {
         HARDWARE_TIME_STAMP,
         SOFTWARE_TIME_STAMP
+    }
+
+    public enum TransportType {
+        TCP,
+        UDP
     }
 
     @Parameter(names = {"-is","--interface-sender"},description = "Tap line from the sender", required=true)
@@ -25,6 +34,8 @@ public class Config {
     @Parameter(names = {"-s","--time-stamp"},description = "software/hardware")
     private String timeStampType = "software";
 
+    @Parameter(names = {"-t","--trans-type"},description = "software/hardware")
+    private String transportType = "udp";
 
 
 
@@ -39,14 +50,21 @@ public class Config {
 
     public TimeStampType getTimeStampType()
     {
-        switch (timeStampType)
-        {
-            case "hardware":
-                return TimeStampType.HARDWARE_TIME_STAMP;
-
-                default: return TimeStampType.SOFTWARE_TIME_STAMP;
+        if ("hardware".equalsIgnoreCase(timeStampType)) {
+            return TimeStampType.HARDWARE_TIME_STAMP;
         }
+        return TimeStampType.SOFTWARE_TIME_STAMP;
     }
+
+    public TransportType getTransportType()
+    {
+        if("tcp".equalsIgnoreCase(transportType))
+        {
+            return TransportType.TCP;
+        }
+        return TransportType.UDP;
+    }
+
 
 
 
