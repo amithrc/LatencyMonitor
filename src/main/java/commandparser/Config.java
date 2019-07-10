@@ -65,10 +65,4 @@ public class Config {
         return TransportType.UDP;
     }
 
-
-
-
-
-
-
 }
