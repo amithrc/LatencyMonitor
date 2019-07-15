@@ -45,7 +45,7 @@ public class Config {
     @Parameter(names = {"-s", "--time-stamp"}, description = "software/hardware")
     private String timeStampType = "software";
 
-    @Parameter(names = {"-t", "--trans-type"}, description = "software/hardware")
+    @Parameter(names = {"-t", "--trans-type"}, description = "tcp/udp")
     private String transportType = "udp";
 
     @Parameter(names = {"-V", "--verbose"}, description = "Debugging information")

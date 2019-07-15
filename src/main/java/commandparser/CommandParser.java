@@ -1,7 +1,16 @@
+/**
+ * @author: Amith Ramanagar Chandrashekar
+ */
+
 package main.java.commandparser;
 
 import com.beust.jcommander.JCommander;
 
+
+/**
+ * Command Parser which reads the args and returns the config class which holds all the
+ * values
+ */
 public class CommandParser {
 
     private JCommander parse = null;
@@ -30,6 +39,7 @@ public class CommandParser {
                 parse.parse(args);
             }catch (com.beust.jcommander.ParameterException pe)
             {
+                pe.getMessage();
                 pe.usage();
             }
 

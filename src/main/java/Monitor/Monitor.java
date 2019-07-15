@@ -16,6 +16,10 @@ public class Monitor {
         config.usage();
     }
 
+    /**
+     * This function handles all the traffic.
+     */
+
     public void handle() {
 
         if(config.isHelp())
