@@ -1,19 +1,29 @@
-package main.java.runnner;
+package main.java.Monitor;
 
 
-import main.java.commandparser.CommandParser;
 import main.java.commandparser.Config;
 
-public class Monitor  implements ProgramRunner {
+public class Monitor {
     private Config config = null;
 
-    public Monitor(CommandParser parser)
+    public Monitor(Config config)
     {
-        config = parser.getConfig();
+        this.config =config;
     }
 
-    @Override
-    public void run() {
+    public void usage()
+    {
+        config.usage();
+    }
+
+    public void handle() {
+
+        if(config.isHelp())
+        {
+            this.usage();
+        }
+
+
 
         System.out.println(config.getInterfaceSender());
         System.out.println(config.getTimeStampType());

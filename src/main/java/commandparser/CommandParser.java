@@ -15,6 +15,7 @@ public class CommandParser {
         config = new Config();
         this.args = args;
         parse = createParser();
+        config.setParser(parse);
     }
 
     private JCommander createParser()
@@ -24,7 +25,14 @@ public class CommandParser {
             parse = JCommander.newBuilder()
                     .addObject(config)
                     .build();
-            parse.parse(args);
+            try
+            {
+                parse.parse(args);
+            }catch (com.beust.jcommander.ParameterException pe)
+            {
+                pe.usage();
+            }
+
         }
         return parse;
     }
@@ -32,4 +40,6 @@ public class CommandParser {
     public Config getConfig() {
         return config;
     }
+
+
 }
