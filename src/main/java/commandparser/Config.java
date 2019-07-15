@@ -20,8 +20,7 @@ public class Config {
         Time stamp, Software or Hardware
     */
 
-    Config()
-    {
+    Config() {
 
     }
 
@@ -50,6 +49,9 @@ public class Config {
 
     @Parameter(names = {"-V", "--verbose"}, description = "Debugging information")
     private Boolean isVerbose = false;
+
+    @Parameter(names = {"-l", "--list-interface"}, description = "List the available network interface")
+    private Boolean isListInterfaceEnabled = false;
 
     @Parameter(names = "--help", help = true)
     private boolean help = false;
@@ -83,6 +85,10 @@ public class Config {
 
     void setParser(JCommander parser) {
         this.parser = parser;
+    }
+
+    public Boolean listInterface() {
+        return isListInterfaceEnabled;
     }
 
     public void usage() {

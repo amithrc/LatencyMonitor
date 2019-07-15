@@ -1,10 +1,12 @@
 package main.java.Monitor;
 
 
+import main.java.Monitor.helper.Helper;
 import main.java.commandparser.Config;
 
 public class Monitor {
     private Config config = null;
+    Helper helper = new Helper(config);
 
     public Monitor(Config config)
     {
@@ -15,7 +17,6 @@ public class Monitor {
     {
         config.usage();
     }
-
     /**
      * This function handles all the traffic.
      */
@@ -27,7 +28,10 @@ public class Monitor {
             this.usage();
         }
 
-
+        if(config.listInterface())
+        {
+            helper.listInterface();
+        }
 
         System.out.println(config.getInterfaceSender());
         System.out.println(config.getTimeStampType());
