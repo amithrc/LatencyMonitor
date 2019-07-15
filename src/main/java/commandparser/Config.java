@@ -34,10 +34,10 @@ public class Config {
         UDP
     }
 
-    @Parameter(names = {"-is", "--interface-sender"}, description = "Tap line from the sender", required = true)
+    @Parameter(names = {"-is", "--interface-sender"}, description = "Tap line from the sender", required = false)
     private String interfaceSender;
 
-    @Parameter(names = {"-ir", "--interface-receiver"}, description = "Tap line from the receiver")
+    @Parameter(names = {"-ir", "--interface-receiver"}, description = "Tap line from the receiver", required = false)
     private String interfaceReceiver;
 
 
@@ -52,6 +52,9 @@ public class Config {
 
     @Parameter(names = {"-l", "--list-interface"}, description = "List the available network interface")
     private Boolean isListInterfaceEnabled = false;
+
+    @Parameter(names = {"-m", "--monitor"}, description = "Pass this argument to monitor the traffic")
+    private Boolean isMonitorEnabled = false;
 
     @Parameter(names = "--help", help = true)
     private boolean help = false;
@@ -89,6 +92,10 @@ public class Config {
 
     public Boolean listInterface() {
         return isListInterfaceEnabled;
+    }
+
+    public Boolean IsMonitorEnabled() {
+        return isMonitorEnabled;
     }
 
     public void usage() {

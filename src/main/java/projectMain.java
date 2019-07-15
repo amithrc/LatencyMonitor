@@ -4,13 +4,15 @@ import main.java.Monitor.Monitor;
 import main.java.commandparser.CommandParser;
 import main.java.commandparser.Config;
 
+import java.io.IOException;
+
 
 /**
  * Main class which takes the arguments and convert that as the config class
  */
 public class projectMain {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         CommandParser parser = new CommandParser(args);
 
