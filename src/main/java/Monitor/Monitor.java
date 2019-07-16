@@ -11,35 +11,32 @@ import java.io.IOException;
 
 public class Monitor {
     private Config config = null;
-    Helper helper = new Helper(config);
+    private Helper helper = null;
 
-    public Monitor(Config config)
-    {
-        this.config =config;
+    public Monitor(Config config) {
+        this.config = config;
+        helper = new Helper(config);
     }
 
-    public void usage()
-    {
+    public void usage() {
         config.usage();
     }
+
     /**
      * This function handles all the traffic.
      */
 
     public void handle() throws IOException {
 
-        if(config.isHelp())
-        {
+        if (config.isHelp()) {
             this.usage();
         }
 
-        if(config.listInterface())
-        {
+        if (config.listInterface()) {
             helper.listInterface();
         }
 
-        if(config.IsMonitorEnabled())
-        {
+        if (config.IsMonitorEnabled()) {
             SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender());
             System.out.println(senderInterface);
             System.out.println(senderInterface.getInterfaceName());
@@ -53,7 +50,7 @@ public class Monitor {
                 //pack.sec seconds portion
                 //pack.usec microsec if software ts, nano if hardware
 
-                System.out.println(pack.sec+"."+pack.usec);
+                System.out.println(pack.sec + "." + pack.usec);
             };
 
             Thread t = new Thread(() -> captor.loopPacket(
@@ -64,21 +61,6 @@ public class Monitor {
             t.setName("JpcapRcvThread");
             t.start();
         }
-
-//        System.out.println(config.getInterfaceSender());
-//        System.out.println(config.getTimeStampType());
-//
-//        if (config.getTimeStampType() == Config.TimeStampType.SOFTWARE_TIME_STAMP)
-//        {
-//            System.out.println("True software");
-//        }else
-//        {
-//            System.out.println("True hardware");
-//        }
-//
-//        System.out.println(config.getTransportType());
-
-
 
     }
 }

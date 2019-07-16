@@ -4,6 +4,8 @@ import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
 import main.java.commandparser.Config;
 
+import java.util.Arrays;
+
 public class Helper {
 
     private Config config = null;
@@ -17,7 +19,8 @@ public class Helper {
     {   System.out.println("-------------------------------------------Network Interface Details-----------------------------------------------");
 
         for (NetworkInterface inter : JpcapCaptor.getDeviceList()) {
-            System.out.println("Interface name:\t"+ inter.name + "\t"+ "Description:\t"+ inter.description );
+            System.out.println("Interface name:\t"+ inter.name + "\t"+ "Description:\t"+ inter.description +"\t");
+
         }
         System.out.println("--------------------------------------------------------------------------------------------------------------------");
     }
