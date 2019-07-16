@@ -37,13 +37,15 @@ public class Monitor {
         }
 
         if (config.IsMonitorEnabled()) {
-            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender());
+            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(),config.getTimeStampType());
             System.out.println(senderInterface);
             System.out.println(senderInterface.getInterfaceName());
 
-            JpcapCaptor captor = JpcapCaptor.openDevice(senderInterface.getNetworkInterface(), 10000,
-                    true, 1, false);
-            captor.setNonBlockingMode(false);
+            JpcapCaptor captor = senderInterface.getCaptor();
+
+                    //JpcapCaptor.openDevice(senderInterface.getNetworkInterface(), 10000,
+            //                    true, 1, false);
+            //            captor.setNonBlockingMode(false);
 
             final PacketReceiver pr = pack -> {
                 //Do something with the packet

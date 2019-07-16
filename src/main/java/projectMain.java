@@ -21,7 +21,7 @@ public class projectMain {
 
         if (args.length < 1) {
             monitor.usage();
-        }else {
+        } else {
             monitor.handle();
         }
     }
