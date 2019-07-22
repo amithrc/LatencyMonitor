@@ -14,15 +14,16 @@ import java.util.logging.Logger;
 public class Config {
 
     private JCommander parser = null;
-    private final Logger logger = null;
+    private Logger logger = null;
+
+    Config() {
+
+        setLogger();
+    }
 
     /*
         Time stamp, Software or Hardware
     */
-
-    Config() {
-
-    }
 
     public enum TimeStampType {
         HARDWARE_TIME_STAMP,
@@ -55,6 +56,7 @@ public class Config {
 
     @Parameter(names = {"-m", "--monitor"}, description = "Pass this argument to monitor the traffic")
     private Boolean isMonitorEnabled = false;
+
 
     @Parameter(names = "--help", help = true)
     private boolean help = false;
@@ -100,6 +102,17 @@ public class Config {
 
     public void usage() {
         parser.usage();
+    }
+
+
+    void setLogger() {
+        logger = Logger.getLogger("latencyMonitor");
+
+        if (this.isVerbose) {
+            System.out.println("Enabled");
+        } else {
+            System.out.println("NOt enabled");
+        }
     }
 
 }

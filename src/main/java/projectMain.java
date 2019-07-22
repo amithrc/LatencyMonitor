@@ -12,10 +12,9 @@ import java.io.IOException;
  */
 public class projectMain {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         CommandParser parser = new CommandParser(args);
-
         Config config = parser.getConfig();
         Monitor monitor = new Monitor(config);
 

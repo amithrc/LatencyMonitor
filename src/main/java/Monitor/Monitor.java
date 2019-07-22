@@ -5,6 +5,7 @@ import jpcap.JpcapCaptor;
 import jpcap.PacketReceiver;
 import main.java.Monitor.SetupInterface.SetupInterface;
 import main.java.Monitor.helper.Helper;
+import main.java.Monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
 
 import java.io.IOException;
@@ -37,27 +38,17 @@ public class Monitor {
         }
 
         if (config.IsMonitorEnabled()) {
-            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(),config.getTimeStampType());
-            System.out.println(senderInterface);
-            System.out.println(senderInterface.getInterfaceName());
 
-            JpcapCaptor captor = senderInterface.getCaptor();
 
-                    //JpcapCaptor.openDevice(senderInterface.getNetworkInterface(), 10000,
-            //                    true, 1, false);
-            //            captor.setNonBlockingMode(false);
+            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType());
+            JpcapCaptor senderCaptor = senderInterface.getCaptor();
 
-            final PacketReceiver pr = pack -> {
-                //Do something with the packet
-                //pack.sec seconds portion
-                //pack.usec microsec if software ts, nano if hardware
 
-                System.out.println(pack.sec + "." + pack.usec);
-            };
+            Sender sender = new Sender();
 
-            Thread t = new Thread(() -> captor.loopPacket(
-                    -1, //Number of packets to capture, -1 if infinite
-                    pr //Function to run for each received packet
+            Thread t = new Thread(() -> senderCaptor.loopPacket(
+                    -1,
+                    sender
             ));
 
             t.setName("JpcapRcvThread");

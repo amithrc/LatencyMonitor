@@ -1,7 +1,3 @@
-/**
- * @author: Amith Ramanagar Chandrashekar
- */
-
 package main.java.commandparser;
 
 import com.beust.jcommander.JCommander;
@@ -18,27 +14,21 @@ public class CommandParser {
     private String[] args = null;
 
 
-
-    public CommandParser(String  ... args)
-    {
+    public CommandParser(String... args) {
         config = new Config();
         this.args = args;
         parse = createParser();
         config.setParser(parse);
     }
 
-    private JCommander createParser()
-    {
-        if(parse == null)
-        {
+    private JCommander createParser() {
+        if (parse == null) {
             parse = JCommander.newBuilder()
                     .addObject(config)
                     .build();
-            try
-            {
+            try {
                 parse.parse(args);
-            }catch (com.beust.jcommander.ParameterException pe)
-            {
+            } catch (com.beust.jcommander.ParameterException pe) {
                 pe.getMessage();
                 pe.usage();
             }
