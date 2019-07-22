@@ -10,7 +10,7 @@ import java.util.logging.Logger;
  * Config class which holds all the command line options and its values
  */
 
-@Parameters(separators = "=", commandDescription = "Latency Monitor")
+@Parameters(separators = "=", commandDescription = "Latency monitor")
 public class Config {
 
     private JCommander parser = null;

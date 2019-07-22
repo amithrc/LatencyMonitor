@@ -1,10 +1,8 @@
-package main.java.Monitor.helper;
+package main.java.monitor.helper;
 
 import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;
 import main.java.commandparser.Config;
-
-import java.util.Arrays;
 
 public class Helper {
 

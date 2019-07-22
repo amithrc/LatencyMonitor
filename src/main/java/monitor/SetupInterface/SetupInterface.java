@@ -1,4 +1,4 @@
-package main.java.Monitor.SetupInterface;
+package main.java.monitor.SetupInterface;
 
 import jpcap.JpcapCaptor;
 import jpcap.NetworkInterface;

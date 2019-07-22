@@ -1,11 +1,10 @@
-package main.java.Monitor;
+package main.java.monitor;
 
 
 import jpcap.JpcapCaptor;
-import jpcap.PacketReceiver;
-import main.java.Monitor.SetupInterface.SetupInterface;
-import main.java.Monitor.helper.Helper;
-import main.java.Monitor.packetreceiver.Sender;
+import main.java.monitor.SetupInterface.SetupInterface;
+import main.java.monitor.helper.Helper;
+import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
 
 import java.io.IOException;

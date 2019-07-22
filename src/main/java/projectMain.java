@@ -1,6 +1,6 @@
 package main.java;
 
-import main.java.Monitor.Monitor;
+import main.java.monitor.Monitor;
 import main.java.commandparser.CommandParser;
 import main.java.commandparser.Config;
 

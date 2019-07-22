@@ -1,4 +1,4 @@
-package main.java.Monitor.packetreceiver;
+package main.java.monitor.packetreceiver;
 
 import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
