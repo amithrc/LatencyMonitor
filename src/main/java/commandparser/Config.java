@@ -43,8 +43,6 @@ public class Config {
     @Parameter(names = {"-t", "--trans-type"}, description = "tcp/udp")
     private String transportType = "udp";
 
-    @Parameter(names = {"-V", "--verbose"}, description = "Debugging information")
-    private Boolean isVerbose = false;
 
     @Parameter(names = {"-l", "--list-interface"}, description = "List the available network interface")
     private Boolean isListInterfaceEnabled = false;
@@ -53,9 +51,18 @@ public class Config {
     private Boolean isMonitorEnabled = false;
 
 
+    @Parameter(names = {"-d", "--time-interval"}, description = "Program runs for this specified time and all the threads will exit gracefully")
+    private int timeInterval = 60;
+
+
     @Parameter(names = "--help", help = true)
     private boolean help = false;
 
+    @Parameter(names = {"-V", "--verbose"}, description = "Debugging information")
+    private Boolean isVerbose = false;
+
+    @Parameter(names = {"-out", "--stdout"}, description = "Logs all the information into stdout")
+    private Boolean isStdOut = false;
 
     /*
        All getter methods
@@ -100,6 +107,18 @@ public class Config {
         return isVerbose;
     }
 
+    public boolean isStdOutEnabled() {
+        return isStdOut;
+    }
+
+    public int getTimeInterval() {
+        return timeInterval;
+    }
+
+
+    public Logger getLogger() {
+        return logger;
+    }
 
 
     /*

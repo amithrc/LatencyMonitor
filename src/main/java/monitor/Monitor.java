@@ -8,14 +8,23 @@ import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+
+/**
+ * This class handles all the features.
+ * if --monitor option is enabled, it will start monitoring
+ */
 public class Monitor {
     private Config config = null;
     private Helper helper = null;
+    private Logger log = null;
 
     public Monitor(Config config) {
         this.config = config;
         helper = new Helper(config);
+        log = config.getLogger();
     }
 
     public void usage() {
@@ -38,16 +47,16 @@ public class Monitor {
 
         if (config.IsMonitorEnabled()) {
 
+            log.log(Level.FINEST, "Welcome to the Latency Monitor");
+            log.info("Welcome again");
 
             SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType());
             JpcapCaptor senderCaptor = senderInterface.getCaptor();
 
 
-            Sender sender = new Sender();
-
             Thread t = new Thread(() -> senderCaptor.loopPacket(
                     -1,
-                    sender
+                    new Sender()
             ));
 
             t.setName("JpcapRcvThread");
