@@ -16,11 +16,6 @@ public class Config {
     private JCommander parser = null;
     private Logger logger = null;
 
-    Config() {
-
-        setLogger();
-    }
-
     /*
         Time stamp, Software or Hardware
     */
@@ -62,6 +57,9 @@ public class Config {
     private boolean help = false;
 
 
+    /*
+       All getter methods
+    */
     public String getInterfaceSender() {
         return interfaceSender;
     }
@@ -84,13 +82,6 @@ public class Config {
         return TransportType.UDP;
     }
 
-    public boolean isHelp() {
-        return help;
-    }
-
-    void setParser(JCommander parser) {
-        this.parser = parser;
-    }
 
     public Boolean listInterface() {
         return isListInterfaceEnabled;
@@ -105,14 +96,31 @@ public class Config {
     }
 
 
-    void setLogger() {
-        logger = Logger.getLogger("latencyMonitor");
-
-        if (this.isVerbose) {
-            System.out.println("Enabled");
-        } else {
-            System.out.println("NOt enabled");
-        }
+    public boolean isVerboseEnabled() {
+        return isVerbose;
     }
+
+
+
+    /*
+        All setter methods
+    */
+
+    void setParser(JCommander parser) {
+        this.parser = parser;
+    }
+
+    void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+
+    /*
+        All helper methods
+    */
+    public boolean isHelp() {
+        return help;
+    }
+
 
 }
