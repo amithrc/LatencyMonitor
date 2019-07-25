@@ -47,11 +47,17 @@ public class Monitor {
 
         if (config.IsMonitorEnabled()) {
 
-            log.log(Level.FINEST, "Welcome to the Latency Monitor");
-            log.info("Welcome again");
+            log.log(Level.FINEST, "Executing Latency Monitor");
 
             SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType());
             JpcapCaptor senderCaptor = senderInterface.getCaptor();
+
+            log.log(Level.FINEST, "Sender Interface: " + senderInterface.getInterfaceName());
+
+            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType());
+            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
+
+            log.log(Level.FINEST, "Receiver Interface: " + senderInterface.getInterfaceName());
 
 
             Thread t = new Thread(() -> senderCaptor.loopPacket(
