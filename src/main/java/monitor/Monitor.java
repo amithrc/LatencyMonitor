@@ -6,8 +6,11 @@ import main.java.monitor.SetupInterface.SetupInterface;
 import main.java.monitor.helper.Helper;
 import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
+import main.java.trafficgenerator.TrafficGenerator;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,16 +52,19 @@ public class Monitor {
 
             log.log(Level.FINEST, "Executing Latency Monitor");
 
-            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType());
+            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(),log);
             JpcapCaptor senderCaptor = senderInterface.getCaptor();
 
             log.log(Level.FINEST, "Sender Interface: " + senderInterface.getInterfaceName());
 
-            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType());
-            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
+//            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(),log);
+//            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
+//
+//            log.log(Level.FINEST, "Receiver Interface: " + senderInterface.getInterfaceName());
 
-            log.log(Level.FINEST, "Receiver Interface: " + senderInterface.getInterfaceName());
 
+            ExecutorService executor = Executors.newFixedThreadPool(1);
+            executor.submit(new TrafficGenerator(config));
 
             Thread t = new Thread(() -> senderCaptor.loopPacket(
                     -1,

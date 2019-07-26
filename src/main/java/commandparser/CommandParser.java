@@ -57,7 +57,7 @@ public class CommandParser {
     }
 
     /**
-     * Setsup the logger
+     * Sets the logger
      *
      * @param isVerbose of verbose is enabled, it will change the log level to Finest to log more details.
      * @param isStdout  outputs the logger into stdout if its set to true

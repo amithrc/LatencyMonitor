@@ -5,6 +5,7 @@ import main.java.commandparser.CommandParser;
 import main.java.commandparser.Config;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 
 /**
@@ -16,6 +17,8 @@ public class projectMain {
 
         CommandParser parser = new CommandParser(args);
         Config config = parser.getConfig();
+
+        config.getLogger().log(Level.FINEST,"Starting Latency Monitoring application, Reading the System config");
         Monitor monitor = new Monitor(config);
 
         if (args.length < 1) {
