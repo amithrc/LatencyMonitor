@@ -1,6 +1,7 @@
 package main.java.monitor.SetupInterface;
 
 import jpcap.JpcapCaptor;
+import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
 import main.java.commandparser.Config;
 
@@ -19,15 +20,21 @@ public class SetupInterface {
     private Config.TimeStampType type = null;
     private Logger logger = null;
 
-
+    /**
+     * Constructors that takes interface name and opens the device
+     *
+     * @param networkInterface -
+     * @param type
+     * @param logger
+     */
     public SetupInterface(String networkInterface, Config.TimeStampType type, Logger logger) {
         this.interfaceName = networkInterface;
         this.networkInterface = fetchInterface(interfaceName);
         this.type = type;
-        this.logger=logger;
+        this.logger = logger;
 
         if (this.networkInterface == null) {
-            logger.log(Level.SEVERE,"Network interface: "+ this.interfaceName +" Not found");
+            logger.log(Level.SEVERE, "Network interface: " + this.interfaceName + " Not found");
             System.out.println("Could not find the network interface");
         }
     }
@@ -54,7 +61,6 @@ public class SetupInterface {
         if (this.type == Config.TimeStampType.HARDWARE_TIME_STAMP) {
             timestamptype = true;
         }
-        System.out.println("What is type " + timestamptype);
         JpcapCaptor captor = null;
         if (this.networkInterface != null) {
 
@@ -71,5 +77,19 @@ public class SetupInterface {
             System.exit(-1);
         }
         return captor;
+    }
+
+    public JpcapSender getSender() {
+        try {
+            boolean timestamptype = false;
+
+            if (this.type == Config.TimeStampType.HARDWARE_TIME_STAMP) {
+                timestamptype = true;
+            }
+            return JpcapSender.openDevice(networkInterface, timestamptype);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

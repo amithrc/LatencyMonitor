@@ -57,11 +57,6 @@ public class Monitor {
 
             log.log(Level.FINEST, "Sender Interface: " + senderInterface.getInterfaceName());
 
-//            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(),log);
-//            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
-//
-//            log.log(Level.FINEST, "Receiver Interface: " + senderInterface.getInterfaceName());
-
 
             ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.submit(new TrafficGenerator(config));

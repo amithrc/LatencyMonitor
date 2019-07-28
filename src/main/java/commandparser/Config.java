@@ -54,6 +54,20 @@ public class Config {
     @Parameter(names = {"-d", "--time-interval"}, description = "Program runs for this specified time and all the threads will exit gracefully")
     private int timeInterval = 60;
 
+    @Parameter(names = {"-n", "--pack-count"}, description = "Number of packets to generate")
+    private int numberOfPackets = 500;
+
+
+    @Parameter(names = {"-S", "--sleep-time"}, description = "Thread sleep time, relevant to generate traffic")
+    private int threadSleepTime = 1;
+
+    @Parameter(names = {"--strategy"}, description = "Strategy to fetch the unique ID per packet")
+    private int strategy = 1;
+
+
+    @Parameter(names = {"--uid-pattern"}, description = "Unique ID pattern")
+    private String uidpattern = "ffff";
+
 
     @Parameter(names = "--help", help = true)
     private boolean help = false;
@@ -80,6 +94,22 @@ public class Config {
             return TimeStampType.HARDWARE_TIME_STAMP;
         }
         return TimeStampType.SOFTWARE_TIME_STAMP;
+    }
+
+    public int getNumberOfPackets() {
+        return numberOfPackets;
+    }
+
+    public String getUidpattern() {
+        return uidpattern;
+    }
+
+    public long getThreadSleepTime() {
+        return (threadSleepTime * 1000);
+    }
+
+    public int getStrategy() {
+        return strategy;
     }
 
     public TransportType getTransportType() {
