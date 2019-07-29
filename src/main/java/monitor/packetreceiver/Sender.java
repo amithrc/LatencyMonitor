@@ -5,7 +5,6 @@ import jpcap.packet.Packet;
 import main.java.commandparser.Config;
 
 import java.util.Arrays;
-import java.util.Base64;
 
 public class Sender implements PacketReceiver {
 
@@ -25,7 +24,7 @@ public class Sender implements PacketReceiver {
         String uid = new String(slice);
         System.out.println("UID " + uid);
         if (uid.equalsIgnoreCase(config.getUidpattern())) {
-            System.out.println("ID matched !!!!!!!!!!!!" + uid);
+            System.out.println("ID matched !!!!!!!!!!!! " + uid);
 
         }
 

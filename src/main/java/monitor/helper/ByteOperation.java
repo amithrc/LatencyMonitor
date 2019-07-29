@@ -32,7 +32,7 @@ public class ByteOperation {
         return BigInteger.valueOf(val).toByteArray();
     }
 
-    public static byte[] getSourceDestMac() {
+    public static byte[] getMacHeader() {
         byte[] bytes = new byte[14];
         Arrays.fill(bytes, (byte) 'f');
         return bytes;
