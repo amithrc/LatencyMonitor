@@ -52,22 +52,15 @@ public class Monitor {
 
             log.log(Level.FINEST, "Executing Latency Monitor");
 
-            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(),log);
+            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
             JpcapCaptor senderCaptor = senderInterface.getCaptor();
 
             log.log(Level.FINEST, "Sender Interface: " + senderInterface.getInterfaceName());
 
 
-            ExecutorService executor = Executors.newFixedThreadPool(1);
+            ExecutorService executor = Executors.newFixedThreadPool(2);
             executor.submit(new TrafficGenerator(config));
-
-            Thread t = new Thread(() -> senderCaptor.loopPacket(
-                    -1,
-                    new Sender()
-            ));
-
-            t.setName("JpcapRcvThread");
-            t.start();
+            executor.submit(()->senderCaptor.loopPacket(-1,new Sender(config)));
         }
 
     }

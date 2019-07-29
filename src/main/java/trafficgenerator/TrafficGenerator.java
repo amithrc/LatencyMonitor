@@ -6,10 +6,9 @@ import jpcap.packet.Packet;
 import main.java.commandparser.Config;
 import main.java.monitor.SetupInterface.SetupInterface;
 import main.java.monitor.helper.ByteOperation;
-import main.java.monitor.stratergy.UniqueIDStrategy;
+
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.logging.Logger;
 
 /**
@@ -21,18 +20,19 @@ public class TrafficGenerator implements Runnable {
     private Config config = null;
     private Logger logger = null;
     private int numberOfPackets;
+    private String uidpattern = null;
+
+    /**
+     * Constructor that takes the config  object to access the command line value
+     *
+     * @param config - Object to the config class
+     */
 
     public TrafficGenerator(Config config) {
         this.config = config;
         logger = config.getLogger();
         this.numberOfPackets = config.getNumberOfPackets();
-    }
-
-    private byte[] getPacket(byte[] a, byte[] b) {
-        byte[] result = new byte[a.length + b.length];
-        System.arraycopy(a, 0, result, 0, a.length);
-        System.arraycopy(b, 0, result, a.length, b.length);
-        return result;
+        uidpattern = config.getUidpattern();
     }
 
     /**
@@ -46,16 +46,13 @@ public class TrafficGenerator implements Runnable {
         JpcapSender sender = senderInterface.getSender();
 
 
-        for (int i = 0; i < numberOfPackets; i++) {
+        for (long i = 0; i < numberOfPackets; i++) {
             Packet packet = new Packet();
 
-            byte[] uid = config.getUidpattern().getBytes() /*ByteOperation.hexToByte(this.uidPattern)*/;
-
-            System.out.println("Bytes to string is "+ new String(uid));
-            System.out.println("Length of ID ="+ uid.length);
-            BigInteger bigInteger = BigInteger.valueOf(i);
-            byte[] iid = bigInteger.toByteArray();
-            packet.data = ByteOperation.concatByteArray(uid, iid);
+            byte[] mac = ByteOperation.getSourceDestMac();
+            byte[] uid = ByteOperation.getBytes(uidpattern);
+            byte[] iid = ByteOperation.getIID(i);
+            packet.data = ByteOperation.concatByteArray(mac,uid, iid);
 
             try {
                 sender.sendPacket(packet);
@@ -68,14 +65,12 @@ public class TrafficGenerator implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println(i);
         }
     }
 
     /**
      * Calls SendTraffic() method inside run method
      */
-
     @Override
     public void run() {
         sendTraffic();

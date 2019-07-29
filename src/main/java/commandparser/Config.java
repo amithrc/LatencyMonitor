@@ -108,6 +108,11 @@ public class Config {
         return (threadSleepTime * 1000);
     }
 
+    public int getUidLength() {
+        return uidpattern.length();
+
+    }
+
     public int getStrategy() {
         return strategy;
     }

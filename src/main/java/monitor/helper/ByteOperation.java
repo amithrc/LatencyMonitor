@@ -2,32 +2,40 @@ package main.java.monitor.helper;
 
 import com.google.common.primitives.Bytes;
 
+import java.math.BigInteger;
+import java.util.Arrays;
+
 public class ByteOperation {
+
     /**
-     * Takes hexa String as an argument returns a byte array
+     * Returns the bytes taking the string as argument
      *
-     * @param s - String in hexadecimal
-     * @return return byte array representation of the Hexa string passed
+     * @param s - String as argument
+     * @return Returns byte array
      */
-    public static byte[] hexToByte(String s) {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-                    + Character.digit(s.charAt(i + 1), 16));
-        }
-        return data;
+
+    public static byte[] getBytes(String s) {
+        return s.getBytes();
     }
 
     /**
      * Returns the concatenated byte array
      *
-     * @param a - Byte array 1
-     * @param b - Byte array 2
-     * @return - concatenated of a and b
+     * @param arrays -vargs
+     * @return - byte array
      */
-    public static byte[] concatByteArray(byte[] a, byte[] b) {
-        return Bytes.concat(a, b);
+    public static byte[] concatByteArray(byte[]... arrays) {
+        return Bytes.concat(arrays);
+    }
+
+    public static byte[] getIID(long val) {
+        return BigInteger.valueOf(val).toByteArray();
+    }
+
+    public static byte[] getSourceDestMac() {
+        byte[] bytes = new byte[14];
+        Arrays.fill(bytes, (byte) 'f');
+        return bytes;
     }
 
 }
