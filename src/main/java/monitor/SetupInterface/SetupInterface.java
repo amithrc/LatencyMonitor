@@ -92,4 +92,11 @@ public class SetupInterface {
         }
         return null;
     }
+
+    public byte[] getSourceMac() {
+        return networkInterface.mac_address;
+
+    }
+
+
 }

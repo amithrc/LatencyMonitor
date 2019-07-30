@@ -49,7 +49,7 @@ public class TrafficGenerator implements Runnable {
         for (long i = 0; i < numberOfPackets; i++) {
             Packet packet = new Packet();
 
-            byte[] mac = ByteOperation.getMacHeader();
+            byte[] mac = ByteOperation.getMacHeader(senderInterface.getSourceMac());
             byte[] uid = ByteOperation.getBytes(uidpattern);
             byte[] iid = ByteOperation.getIID(i);
             packet.data = ByteOperation.concatByteArray(mac, uid, iid);

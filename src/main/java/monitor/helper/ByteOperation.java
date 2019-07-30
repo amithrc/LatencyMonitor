@@ -32,10 +32,18 @@ public class ByteOperation {
         return BigInteger.valueOf(val).toByteArray();
     }
 
-    public static byte[] getMacHeader() {
-        byte[] bytes = new byte[14];
-        Arrays.fill(bytes, (byte) 'f');
-        return bytes;
+    /**
+     * Returns the 14 byte ethernet header
+     *
+     * @param sourceMac - Takes the source interface MAc address
+     * @return - returns the 14 bytes Ether net header
+     */
+    public static byte[] getMacHeader(byte[] sourceMac) {
+        byte[] destinationMac = new byte[6];
+        Arrays.fill(destinationMac, (byte) 'f');
+        byte[] ethertype = new byte[2];
+        Arrays.fill(ethertype, (byte) 'f');
+        return concatByteArray(destinationMac, sourceMac, ethertype);
     }
 
 }
