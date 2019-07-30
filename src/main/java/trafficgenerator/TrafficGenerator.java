@@ -46,15 +46,17 @@ public class TrafficGenerator implements Runnable {
         JpcapSender sender = senderInterface.getSender();
 
 
-        for (long i = 0; i < numberOfPackets; i++) {
+        for (int i = 0; i < numberOfPackets; i++) {
             Packet packet = new Packet();
 
             byte[] mac = ByteOperation.getMacHeader(senderInterface.getSourceMac());
             byte[] uid = ByteOperation.getBytes(uidpattern);
             byte[] iid = ByteOperation.getIID(i);
+            System.out.println("IID length "+ iid.length);
             packet.data = ByteOperation.concatByteArray(mac, uid, iid);
 
             try {
+                System.out.println("Sending data packetID = " + i);
                 sender.sendPacket(packet);
             } catch (IOException e) {
                 e.printStackTrace();

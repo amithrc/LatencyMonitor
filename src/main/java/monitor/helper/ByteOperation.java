@@ -3,6 +3,7 @@ package main.java.monitor.helper;
 import com.google.common.primitives.Bytes;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class ByteOperation {
@@ -28,8 +29,8 @@ public class ByteOperation {
         return Bytes.concat(arrays);
     }
 
-    public static byte[] getIID(long val) {
-        return BigInteger.valueOf(val).toByteArray();
+    public static byte[] getIID(int val) {
+        return ByteBuffer.allocate(4).putInt(val).array();
     }
 
     /**
@@ -45,5 +46,11 @@ public class ByteOperation {
         Arrays.fill(ethertype, (byte) 'f');
         return concatByteArray(destinationMac, sourceMac, ethertype);
     }
+
+    public static int getInteger(byte[] bytes) {
+        return new BigInteger(bytes).intValue();
+
+    }
+
 
 }

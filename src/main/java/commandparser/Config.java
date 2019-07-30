@@ -68,6 +68,9 @@ public class Config {
     @Parameter(names = {"--uid-pattern"}, description = "Unique ID pattern")
     private String uidpattern = "ffff";
 
+    @Parameter(names = {"-g", "--generate-traffic"}, description = "Generates the Ethernet traffic")
+    private Boolean isTrafficGen = false;
+
 
     @Parameter(names = "--help", help = true)
     private boolean help = false;
@@ -77,6 +80,7 @@ public class Config {
 
     @Parameter(names = {"-out", "--stdout"}, description = "Logs all the information into stdout")
     private Boolean isStdOut = false;
+
 
     /*
        All getter methods
@@ -122,6 +126,10 @@ public class Config {
             return TransportType.TCP;
         }
         return TransportType.UDP;
+    }
+
+    public boolean isTrafficGen() {
+        return isTrafficGen;
     }
 
 
