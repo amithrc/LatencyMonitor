@@ -1,6 +1,5 @@
 package main.java.monitor.stratergy.uniqueid;
 
-import com.google.common.primitives.Bytes;
 import jpcap.packet.Packet;
 
 
@@ -20,4 +19,7 @@ abstract public class UniqueIDStrategy {
      */
     public abstract long getPacketID(Packet packet);
 
+
 }
+
+

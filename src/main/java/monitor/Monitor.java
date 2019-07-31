@@ -61,6 +61,8 @@ public class Monitor {
             ExecutorService executor = Executors.newFixedThreadPool(2);
             executor.submit(new TrafficGenerator(config));
             executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config)));
+
+            executor.shutdown();
         }
 
 

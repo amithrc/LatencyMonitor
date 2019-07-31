@@ -29,8 +29,8 @@ public class ByteOperation {
         return Bytes.concat(arrays);
     }
 
-    public static byte[] getIID(int val) {
-        return ByteBuffer.allocate(4).putInt(val).array();
+    public static byte[] getIID(long val) {
+        return ByteBuffer.allocate(8).putLong(val).array();
     }
 
     /**
@@ -47,8 +47,8 @@ public class ByteOperation {
         return concatByteArray(destinationMac, sourceMac, ethertype);
     }
 
-    public static int getInteger(byte[] bytes) {
-        return new BigInteger(bytes).intValue();
+    public static long getInteger(byte[] bytes) {
+        return new BigInteger(bytes).longValue();
 
     }
 
