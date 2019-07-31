@@ -6,6 +6,8 @@ import main.java.monitor.SetupInterface.SetupInterface;
 import main.java.monitor.helper.Helper;
 import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
+import main.java.monitor.stratergy.storage.StorageStrategy;
+import main.java.monitor.stratergy.storage.StorageType1;
 import main.java.trafficgenerator.TrafficGenerator;
 
 import java.io.IOException;
@@ -57,10 +59,11 @@ public class Monitor {
 
             log.log(Level.FINEST, "Sender Interface: " + senderInterface.getInterfaceName());
 
+            StorageStrategy storage = new StorageType1(log);
 
             ExecutorService executor = Executors.newFixedThreadPool(2);
             executor.submit(new TrafficGenerator(config));
-            executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config)));
+            executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
 
             executor.shutdown();
         }

@@ -11,12 +11,12 @@ abstract public class StorageStrategy {
     /**
      * Store the packet when it arrives on the interface
      */
-    public abstract void putpacket();
+    public abstract void putpacket(Long iid, Float timeStamp);
 
     /**
      * Match the packet from the data structure and return it.
      *
      * @return - latency information
      */
-    public abstract float getpacket();
+    public abstract float getpacket(Long iid);
 }
