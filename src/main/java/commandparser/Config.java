@@ -61,8 +61,11 @@ public class Config {
     @Parameter(names = {"-S", "--sleep-time"}, description = "Thread sleep time, relevant to generate traffic")
     private int threadSleepTime = 1;
 
-    @Parameter(names = {"--strategy"}, description = "Strategy to fetch the unique ID per packet")
-    private int strategy = 1;
+    @Parameter(names = {"--uid-strategy"}, description = "Strategy to fetch the unique ID per packet")
+    private int uidstrategy = 1;
+
+    @Parameter(names = {"--storage-strategy"}, description = "Storage strategy")
+    private int storagestrategy = 1;
 
 
     @Parameter(names = {"--uid-pattern"}, description = "Unique ID pattern")
@@ -117,8 +120,12 @@ public class Config {
 
     }
 
-    public int getStrategy() {
-        return strategy;
+    public int getUidStrategy() {
+        return uidstrategy;
+    }
+
+    public int getStoragestrategy() {
+        return storagestrategy;
     }
 
     public TransportType getTransportType() {

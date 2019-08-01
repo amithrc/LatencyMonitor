@@ -36,6 +36,15 @@ public class Monitor {
         config.usage();
     }
 
+    private StorageStrategy getStorageStrategy() {
+
+        if (config.getStoragestrategy() == 1) {
+            return new <Long, Long>StorageType1(log);
+        }
+        return null;
+    }
+
+
     /**
      * This function handles all the traffic.
      */
@@ -52,14 +61,23 @@ public class Monitor {
 
         if (config.IsMonitorEnabled()) {
 
-            log.log(Level.FINEST, "Executing Latency Monitor");
+            log.log(Level.FINEST, "Started Latency Monitor...");
 
             SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
             JpcapCaptor senderCaptor = senderInterface.getCaptor();
+//
+//            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
+//            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
 
-            log.log(Level.FINEST, "Sender Interface: " + senderInterface.getInterfaceName());
+            log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:");
 
-            StorageStrategy storage = new StorageType1(log);
+
+            StorageStrategy storage = getStorageStrategy();
+
+            if (storage == null) {
+                log.log(Level.SEVERE, "Cannot allocate memory for storing the packets, exiting..");
+                System.exit(-1);
+            }
 
             ExecutorService executor = Executors.newFixedThreadPool(2);
             executor.submit(new TrafficGenerator(config));
@@ -70,6 +88,7 @@ public class Monitor {
 
 
         if (config.isTrafficGen()) {
+            log.log(Level.FINEST, "Generating Traffic....");
             ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.submit(new TrafficGenerator(config));
             executor.shutdown();

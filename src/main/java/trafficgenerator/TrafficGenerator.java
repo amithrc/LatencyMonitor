@@ -9,6 +9,7 @@ import main.java.monitor.helper.ByteOperation;
 
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -52,17 +53,23 @@ public class TrafficGenerator implements Runnable {
             byte[] mac = ByteOperation.getMacHeader(senderInterface.getSourceMac());
             byte[] uid = ByteOperation.getBytes(uidpattern);
             byte[] iid = ByteOperation.getIID(i);
-            System.out.println("IID length "+ iid.length);
             packet.data = ByteOperation.concatByteArray(mac, uid, iid);
 
+            /* Debugging message */
+            logger.log(Level.FINEST, "------------------------------------------------------------");
+            logger.log(Level.FINEST, "PacketID: " + i + " UID pattern used:" + uidpattern);
+            logger.log(Level.FINEST, "Header length: " + mac.length + " Data length:" + packet.data.length);
+            logger.log(Level.FINEST, "-----------------------------------------------------------");
+
             try {
-                System.out.println("Sending data packetID = " + i);
+                logger.log(Level.FINEST, "Sending data packetID = " + i);
                 sender.sendPacket(packet);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
+                logger.log(Level.FINEST, "Sleeping for ..." + config.getThreadSleepTime() + " sec");
                 Thread.sleep(config.getThreadSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();

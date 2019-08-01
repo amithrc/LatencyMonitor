@@ -13,6 +13,7 @@ public class Sender implements PacketReceiver {
     private Config config = null;
     private StorageStrategy storage = null;
 
+
     public Sender(Config config, StorageStrategy storage) {
         this.config = config;
         this.storage = storage;
@@ -25,8 +26,9 @@ public class Sender implements PacketReceiver {
         long iid = strategy.getPacketID(packet);
 
         if (iid != -1) {
-            storage.putpacket(iid, (float) 0.0);
+            storage.putpacket(iid, packet.sec);
             System.out.println("Packet Identifier IID =  " + iid + " Value =" + storage.getpacket(iid));
+            System.out.println("Time sec: " + packet.sec + " USEC " + packet.usec);
         }
     }
 }

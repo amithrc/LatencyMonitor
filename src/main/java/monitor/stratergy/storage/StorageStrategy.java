@@ -1,22 +1,26 @@
 package main.java.monitor.stratergy.storage;
 
+
 /**
- * Abstract class that defines two methods to put the packet timestamp into data structure
- * that sub class implements
- * All the subclass need to make sure it is thread safe
+ * Interface that defines the storage Strategy
  */
-
-abstract public class StorageStrategy {
-
-    /**
-     * Store the packet when it arrives on the interface
-     */
-    public abstract void putpacket(Long iid, Float timeStamp);
+public interface StorageStrategy {
 
     /**
-     * Match the packet from the data structure and return it.
+     * Stores the packet when it arrives on the sender interface
      *
-     * @return - latency information
+     * @param iid       - Unique ID of the packet
+     * @param timeStamp - Epoch time of the unix
      */
-    public abstract float getpacket(Long iid);
+
+    void putpacket(Long iid, Long timeStamp);
+
+    /**
+     * Matches the packet when it arrives on the receiver interface and returns the time
+     *
+     * @param iid
+     * @return return the Epoc time to calculate the difference
+     */
+    Long getpacket(Long iid);
+
 }
