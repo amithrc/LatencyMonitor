@@ -4,7 +4,7 @@ package main.java.monitor.stratergy.storage;
 /**
  * Interface that defines the storage Strategy
  */
-public interface StorageStrategy {
+public interface StorageStrategy<T,V>{
 
     /**
      * Stores the packet when it arrives on the sender interface
@@ -13,7 +13,7 @@ public interface StorageStrategy {
      * @param timeStamp - Epoch time of the unix
      */
 
-    void putpacket(Long iid, Long timeStamp);
+    void putpacket(T iid, V timeStamp);
 
     /**
      * Matches the packet when it arrives on the receiver interface and returns the time
@@ -21,6 +21,6 @@ public interface StorageStrategy {
      * @param iid
      * @return return the Epoc time to calculate the difference
      */
-    Long getpacket(Long iid);
+    V getpacket(T iid);
 
 }

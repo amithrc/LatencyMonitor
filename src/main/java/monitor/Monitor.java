@@ -4,6 +4,7 @@ package main.java.monitor;
 import jpcap.JpcapCaptor;
 import main.java.monitor.SetupInterface.SetupInterface;
 import main.java.monitor.helper.Helper;
+import main.java.monitor.packetreceiver.Receiver;
 import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
 import main.java.monitor.stratergy.storage.StorageStrategy;
@@ -39,7 +40,7 @@ public class Monitor {
     private StorageStrategy getStorageStrategy() {
 
         if (config.getStoragestrategy() == 1) {
-            return new <Long, Long>StorageType1(log);
+            return new StorageType1(log);
         }
         return null;
     }
@@ -82,6 +83,7 @@ public class Monitor {
             ExecutorService executor = Executors.newFixedThreadPool(2);
             executor.submit(new TrafficGenerator(config));
             executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
+            executor.submit(() -> senderCaptor.loopPacket(-1, new Receiver(config, storage)));
 
             executor.shutdown();
         }

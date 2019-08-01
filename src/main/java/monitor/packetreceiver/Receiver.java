@@ -16,7 +16,6 @@ public class Receiver implements PacketReceiver {
     public Receiver(Config config, StorageStrategy storage) {
         this.config = config;
         this.storage = storage;
-
     }
 
     @Override
@@ -26,7 +25,7 @@ public class Receiver implements PacketReceiver {
         long iid = strategy.getPacketID(packet);
 
         if (iid != -1) {
-            Long val = storage.getpacket(iid);
+            Long val = (Long) storage.getpacket(iid);
             System.out.println("RTT"+( val-packet.sec));
             System.out.println("Packet Identifier IID =  " + iid + " Value =" + storage.getpacket(iid));
             System.out.println("Time sec: " + packet.sec + " USEC " + packet.usec);

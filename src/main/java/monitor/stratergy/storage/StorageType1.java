@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 /**
  * Storage Strategy type1
  */
-public class StorageType1 implements StorageStrategy {
+public class StorageType1 implements StorageStrategy<Long, Long> {
 
     private Logger logger = null;
     private LinkedHashMap<Long, Long> table = null;
