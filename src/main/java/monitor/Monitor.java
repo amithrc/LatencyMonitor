@@ -66,9 +66,9 @@ public class Monitor {
 
             SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
             JpcapCaptor senderCaptor = senderInterface.getCaptor();
-//
-//            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
-//            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
+
+            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
+            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
 
             log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:");
 
@@ -80,10 +80,10 @@ public class Monitor {
                 System.exit(-1);
             }
 
-            ExecutorService executor = Executors.newFixedThreadPool(2);
+            ExecutorService executor = Executors.newFixedThreadPool(3);
             executor.submit(new TrafficGenerator(config));
             executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
-            executor.submit(() -> senderCaptor.loopPacket(-1, new Receiver(config, storage)));
+            executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
 
             executor.shutdown();
         }
