@@ -23,7 +23,7 @@ public class Sender implements PacketReceiver {
     @Override
     public void receivePacket(Packet packet) {
         UniqueIDStrategy strategy = new Strategy1(config);
-        long iid = strategy.getPacketID(packet);
+        long iid = (long) strategy.getPacketID(packet);
 
         if (iid != -1) {
             storage.putpacket(iid, packet.sec);

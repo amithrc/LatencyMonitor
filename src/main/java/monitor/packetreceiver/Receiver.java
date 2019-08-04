@@ -22,7 +22,7 @@ public class Receiver implements PacketReceiver {
     public void receivePacket(Packet packet) {
 
         UniqueIDStrategy strategy = new Strategy1(config);
-        long iid = strategy.getPacketID(packet);
+        long iid = (long) strategy.getPacketID(packet);
 
         if (iid != -1) {
             Long val = (Long) storage.getpacket(iid);

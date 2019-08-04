@@ -6,7 +6,7 @@ import main.java.monitor.helper.ByteOperation;
 
 import java.util.Arrays;
 
-public class Strategy1 extends UniqueIDStrategy {
+public class Strategy1 extends UniqueIDStrategy<Long> {
 
     private Config config = null;
 
@@ -15,7 +15,7 @@ public class Strategy1 extends UniqueIDStrategy {
     }
 
     @Override
-    public long getPacketID(Packet packet) {
+    public Long getPacketID(Packet packet) {
         byte[] uuidSlice = Arrays.copyOfRange(packet.data, 0, config.getUidLength());
         byte[] iidSlice = Arrays.copyOfRange(packet.data, config.getUidLength(), config.getUidLength() + 8);
         String uid = new String(uuidSlice);
@@ -23,6 +23,6 @@ public class Strategy1 extends UniqueIDStrategy {
         if (uid.equalsIgnoreCase(config.getUidpattern())) {
             return iid = ByteOperation.getInteger(iidSlice);
         }
-        return -1;
+        return (long) -1;
     }
 }

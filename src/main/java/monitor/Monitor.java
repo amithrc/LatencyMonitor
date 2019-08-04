@@ -22,6 +22,7 @@ import java.util.logging.Logger;
  * This class handles all the features.
  * if --monitor option is enabled, it will start monitoring
  */
+
 public class Monitor {
     private Config config = null;
     private Helper helper = null;
@@ -45,6 +46,14 @@ public class Monitor {
         return null;
     }
 
+    private void printConfigInfo() {
+        log.log(Level.FINEST, "*****************************Config Information**********************************");
+        log.log(Level.FINEST, "Sender Interface: " + config.getInterfaceSender());
+        log.log(Level.FINEST, "Receiver Interface: " + config.getInterfaceSender());
+        String res = config.getTimeStampType().toString().equalsIgnoreCase("hardware") ? "hardware" : "software";
+        log.log(Level.FINEST, "Time-stamp-type: " + res);
+    }
+
 
     /**
      * This function handles all the traffic.
@@ -52,13 +61,25 @@ public class Monitor {
 
     public void handle() throws IOException {
 
+        printConfigInfo();
+
+        /*
+        Prints all the available command line option
+         */
         if (config.isHelp()) {
             this.usage();
         }
 
+        /*
+            Prints the available interface in the system
+         */
         if (config.listInterface()) {
             helper.listInterface();
         }
+
+        /*
+         * --Monitor option should be enabled in the command line inorder to monitor the traffic
+         */
 
         if (config.IsMonitorEnabled()) {
 
@@ -67,10 +88,11 @@ public class Monitor {
             SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
             JpcapCaptor senderCaptor = senderInterface.getCaptor();
 
+
             SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
             JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
 
-            log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:");
+            log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:" + receiverInterface.getInterfaceName());
 
 
             StorageStrategy storage = getStorageStrategy();
@@ -80,15 +102,26 @@ public class Monitor {
                 System.exit(-1);
             }
 
-            ExecutorService executor = Executors.newFixedThreadPool(3);
-            executor.submit(new TrafficGenerator(config));
-            executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
-            executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
+            /*
+                if --traffic-generator is enabled, programs creates the packets by adding FF FF FF FF the first 4 bytes in tge data payload by default.
+                Pattern can be overridden.
+             */
+            if (config.isTrafficGen()) {
+                ExecutorService executor = Executors.newFixedThreadPool(3);
+                executor.submit(new TrafficGenerator(config));
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
+                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
+            } else {
+                ExecutorService executor = Executors.newFixedThreadPool(2);
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
+                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
+            }
 
-            executor.shutdown();
         }
 
-
+        /*
+         * Generates the traffic with default config
+         */
         if (config.isTrafficGen()) {
             log.log(Level.FINEST, "Generating Traffic....");
             ExecutorService executor = Executors.newFixedThreadPool(1);

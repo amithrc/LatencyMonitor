@@ -8,7 +8,7 @@ import jpcap.packet.Packet;
  * The strategy can be changed according to the TrafficGeneratorModel
  */
 
-abstract public class UniqueIDStrategy {
+abstract public class UniqueIDStrategy<T> {
 
     /**
      * This needs to be implemented by all the sub class
@@ -17,7 +17,7 @@ abstract public class UniqueIDStrategy {
      *               Inspects the packet payload to return the ID
      * @return - return the uniqueID
      */
-    public abstract long getPacketID(Packet packet);
+    public abstract T getPacketID(Packet packet);
 
 
 }
