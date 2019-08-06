@@ -89,26 +89,24 @@ public class Monitor {
             helper.listInterface();
         }
 
+        /*
+           Captures the traffic on the given interface
+         */
+
         if (config.IsCaptureEnabled()) {
             printConfigInfo();
 
             SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
             JpcapCaptor captureCaptor = captureinterface.getCaptor();
 
-
             UniqueIDStrategy uniqueIDStrategy = getUniqueIDStrategy();
-
-
             PacketConfig packetConfig = new PacketConfig(null, uniqueIDStrategy);
 
-            ExecutorService executor = Executors.newFixedThreadPool(2);
-            executor.submit(new TrafficGenerator(config));
+
+            ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, packetConfig)));
         }
 
-        /*
-         * --Monitor option should be enabled in the command line inorder to monitor the traffic
-         */
 
         if (config.IsMonitorEnabled()) {
 

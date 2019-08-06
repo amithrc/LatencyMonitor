@@ -18,7 +18,6 @@ public class CaptureTraffic implements PacketReceiver {
 
     @Override
     public void receivePacket(Packet packet) {
-        System.out.println("Is it executing ");
         long iid = (long) uniqueIDStrategy.getPacketID(packet);
 
         if (iid != -1) {
