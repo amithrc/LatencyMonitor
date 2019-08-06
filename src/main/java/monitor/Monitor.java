@@ -4,11 +4,15 @@ package main.java.monitor;
 import jpcap.JpcapCaptor;
 import main.java.monitor.SetupInterface.SetupInterface;
 import main.java.monitor.helper.Helper;
+import main.java.monitor.packetreceiver.CaptureTraffic;
+import main.java.monitor.packetreceiver.PacketConfig;
 import main.java.monitor.packetreceiver.Receiver;
 import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
 import main.java.monitor.stratergy.storage.StorageStrategy;
 import main.java.monitor.stratergy.storage.StorageType1;
+import main.java.monitor.stratergy.uniqueid.Strategy1;
+import main.java.monitor.stratergy.uniqueid.UniqueIDStrategy;
 import main.java.trafficgenerator.TrafficGenerator;
 
 import java.io.IOException;
@@ -46,6 +50,14 @@ public class Monitor {
         return null;
     }
 
+    private UniqueIDStrategy getUniqueIDStrategy() {
+
+        if (config.getUidStrategy() == 1) {
+            return new Strategy1(config);
+        }
+        return null;
+    }
+
     private void printConfigInfo() {
         log.log(Level.FINEST, "*****************************Config Information**********************************");
         log.log(Level.FINEST, "Sender Interface: " + config.getInterfaceSender());
@@ -77,6 +89,23 @@ public class Monitor {
             helper.listInterface();
         }
 
+        if (config.IsCaptureEnabled()) {
+            printConfigInfo();
+
+            SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
+            JpcapCaptor captureCaptor = captureinterface.getCaptor();
+
+
+            UniqueIDStrategy uniqueIDStrategy = getUniqueIDStrategy();
+
+
+            PacketConfig packetConfig = new PacketConfig(null, uniqueIDStrategy);
+
+            ExecutorService executor = Executors.newFixedThreadPool(2);
+            executor.submit(new TrafficGenerator(config));
+            executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, packetConfig)));
+        }
+
         /*
          * --Monitor option should be enabled in the command line inorder to monitor the traffic
          */
@@ -105,15 +134,18 @@ public class Monitor {
             /*
                 if --traffic-generator is enabled, programs creates the packets by adding FF FF FF FF the first 4 bytes in tge data payload by default.
                 Pattern can be overridden.
-             */
+            */
+
+            PacketConfig packetConfig = new PacketConfig(storage, new Strategy1(config));
+
             if (config.isTrafficGen()) {
                 ExecutorService executor = Executors.newFixedThreadPool(3);
                 executor.submit(new TrafficGenerator(config));
-                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
                 executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
             } else {
                 ExecutorService executor = Executors.newFixedThreadPool(2);
-                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, storage)));
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
                 executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
             }
 

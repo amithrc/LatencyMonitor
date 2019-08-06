@@ -3,30 +3,26 @@ package main.java.monitor.packetreceiver;
 import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
-import main.java.monitor.stratergy.storage.StorageStrategy;
 import main.java.monitor.stratergy.uniqueid.UniqueIDStrategy;
 
 
-public class Sender implements PacketReceiver {
+public class CaptureTraffic implements PacketReceiver {
 
     private Config config = null;
-    private StorageStrategy storage = null;
     private UniqueIDStrategy uniqueIDStrategy = null;
 
-
-    public Sender(Config config, PacketConfig packetConfig) {
+    public CaptureTraffic(Config config, PacketConfig packetConfig) {
         this.config = config;
-        this.storage = packetConfig.getStorage();
         this.uniqueIDStrategy = packetConfig.getUniqueIDStrategy();
     }
 
     @Override
     public void receivePacket(Packet packet) {
+        System.out.println("Is it executing ");
         long iid = (long) uniqueIDStrategy.getPacketID(packet);
 
         if (iid != -1) {
-            storage.putpacket(iid, packet.sec);
-            System.out.println("Packet Identifier IID =  " + iid + " Value =" + storage.getpacket(iid));
+            System.out.println("Packet Identifier IID =  " + iid);
             System.out.println("Time sec: " + packet.sec + " USEC " + packet.usec);
         }
     }

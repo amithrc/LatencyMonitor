@@ -30,7 +30,5 @@ public class Receiver implements PacketReceiver {
             System.out.println("Packet Identifier IID =  " + iid + " Value =" + storage.getpacket(iid));
             System.out.println("Time sec: " + packet.sec + " USEC " + packet.usec);
         }
-
-
     }
 }

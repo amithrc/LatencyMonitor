@@ -25,10 +25,6 @@ public class Config {
         SOFTWARE_TIME_STAMP
     }
 
-    public enum TransportType {
-        TCP,
-        UDP
-    }
 
     @Parameter(names = {"-is", "--interface-sender"}, description = "Tap line from the sender", required = false)
     private String interfaceSender;
@@ -40,15 +36,16 @@ public class Config {
     @Parameter(names = {"-s", "--time-stamp"}, description = "software/hardware")
     private String timeStampType = "software";
 
-    @Parameter(names = {"-t", "--trans-type"}, description = "tcp/udp")
-    private String transportType = "udp";
-
 
     @Parameter(names = {"-l", "--list-interface"}, description = "List the available network interface")
     private Boolean isListInterfaceEnabled = false;
 
     @Parameter(names = {"-m", "--monitor"}, description = "Pass this argument to monitor the traffic")
     private Boolean isMonitorEnabled = false;
+
+    @Parameter(names = {"-cap", "--capture"}, description = "Capture traffic on the given interface")
+    private Boolean isCaptureEnabled = false;
+
 
 
     @Parameter(names = {"-d", "--time-interval"}, description = "Program runs for this specified time and all the threads will exit gracefully")
@@ -128,12 +125,6 @@ public class Config {
         return storagestrategy;
     }
 
-    public TransportType getTransportType() {
-        if ("tcp".equalsIgnoreCase(transportType)) {
-            return TransportType.TCP;
-        }
-        return TransportType.UDP;
-    }
 
     public boolean isTrafficGen() {
         return isTrafficGen;
@@ -163,6 +154,12 @@ public class Config {
 
     public int getTimeInterval() {
         return timeInterval;
+    }
+
+
+
+    public Boolean IsCaptureEnabled() {
+        return isCaptureEnabled;
     }
 
 

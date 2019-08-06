@@ -34,15 +34,20 @@ public class SetupInterface {
         this.logger = logger;
 
         if (this.networkInterface == null) {
+
             logger.log(Level.SEVERE, "Network interface: " + this.interfaceName + " Not found");
             System.out.println("Could not find the network interface");
+            System.exit(-1);
         }
     }
 
     private NetworkInterface fetchInterface(String interfaceName) {
         for (NetworkInterface inter : JpcapCaptor.getDeviceList()) {
+
             if (inter.name.equalsIgnoreCase(interfaceName))
+            {
                 return inter;
+            }
         }
         return null;
     }
