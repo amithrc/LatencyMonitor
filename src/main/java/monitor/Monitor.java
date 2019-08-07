@@ -3,10 +3,7 @@ package main.java.monitor;
 
 import main.java.monitor.utils.Helper;
 import main.java.commandparser.Config;
-import main.java.monitor.stratergy.storage.StorageStrategy;
-import main.java.monitor.stratergy.storage.StorageType1;
-import main.java.monitor.stratergy.uniqueid.Strategy1;
-import main.java.monitor.stratergy.uniqueid.UniqueIDStrategy;
+
 import main.java.trafficgenerator.TrafficGenerator;
 
 import java.io.IOException;
@@ -36,21 +33,6 @@ public class Monitor {
         config.usage();
     }
 
-    private StorageStrategy getStorageStrategy() {
-
-        if (config.getStoragestrategy() == 1) {
-            return new StorageType1(log);
-        }
-        return null;
-    }
-
-    private UniqueIDStrategy getUniqueIDStrategy() {
-
-        if (config.getUidStrategy() == 1) {
-            return new Strategy1(config);
-        }
-        return null;
-    }
 
     private void printConfigInfo() {
         log.log(Level.FINEST, "*****************************Config Information**********************************");
