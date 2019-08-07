@@ -1,13 +1,7 @@
 package main.java.monitor;
 
 
-import jpcap.JpcapCaptor;
-import main.java.monitor.utils.SetupInterface;
 import main.java.monitor.utils.Helper;
-import main.java.monitor.utils.CaptureTraffic;
-import main.java.monitor.utils.PacketConfig;
-import main.java.monitor.packetreceiver.Receiver;
-import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;
 import main.java.monitor.stratergy.storage.StorageStrategy;
 import main.java.monitor.stratergy.storage.StorageType1;
@@ -73,7 +67,10 @@ public class Monitor {
 
     public void handle() throws IOException {
 
-        printConfigInfo();
+
+        if(config.isVerboseEnabled())
+            printConfigInfo();
+
 
         /*
         Prints all the available command line option
@@ -93,61 +90,61 @@ public class Monitor {
            Captures the traffic on the given interface
          */
 
-        if (config.IsCaptureEnabled()) {
-            printConfigInfo();
-
-            SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
-            JpcapCaptor captureCaptor = captureinterface.getCaptor();
-
-            UniqueIDStrategy uniqueIDStrategy = getUniqueIDStrategy();
-            PacketConfig packetConfig = new PacketConfig(null, uniqueIDStrategy);
-
-
-            ExecutorService executor = Executors.newFixedThreadPool(1);
-            executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, packetConfig)));
-        }
-
-
-        if (config.IsMonitorEnabled()) {
-
-            log.log(Level.FINEST, "Started Latency Monitor...");
-
-            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
-            JpcapCaptor senderCaptor = senderInterface.getCaptor();
+//        if (config.IsCaptureEnabled()) {
+//            printConfigInfo();
+//
+//            SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
+//            JpcapCaptor captureCaptor = captureinterface.getCaptor();
+//
+//            UniqueIDStrategy uniqueIDStrategy = getUniqueIDStrategy();
+//
+//            ExecutorService executor = Executors.newFixedThreadPool(2);
+//            executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, uniqueIDStrategy)));
+//            executor.submit(() -> captureCaptor.loopPacket(-1, new Sender(config, packetConfig)));
+//
+//        }
 
 
-            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
-            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
-
-            log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:" + receiverInterface.getInterfaceName());
-
-
-            StorageStrategy storage = getStorageStrategy();
-
-            if (storage == null) {
-                log.log(Level.SEVERE, "Cannot allocate memory for storing the packets, exiting..");
-                System.exit(-1);
-            }
-
-            /*
-                if --traffic-generator is enabled, programs creates the packets by adding FF FF FF FF the first 4 bytes in tge data payload by default.
-                Pattern can be overridden.
-            */
-
-            PacketConfig packetConfig = new PacketConfig(storage, new Strategy1(config));
-
-            if (config.isTrafficGen()) {
-                ExecutorService executor = Executors.newFixedThreadPool(3);
-                executor.submit(new TrafficGenerator(config));
-                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
-                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
-            } else {
-                ExecutorService executor = Executors.newFixedThreadPool(2);
-                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
-                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
-            }
-
-        }
+//        if (config.IsMonitorEnabled()) {
+//
+//            log.log(Level.FINEST, "Started Latency Monitor...");
+//
+//            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
+//            JpcapCaptor senderCaptor = senderInterface.getCaptor();
+//
+//
+//            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
+//            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
+//
+//            log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:" + receiverInterface.getInterfaceName());
+//
+//
+//            StorageStrategy storage = getStorageStrategy();
+//
+//            if (storage == null) {
+//                log.log(Level.SEVERE, "Cannot allocate memory for storing the packets, exiting..");
+//                System.exit(-1);
+//            }
+//
+//            /*
+//                if --traffic-generator is enabled, programs creates the packets by adding FF FF FF FF the first 4 bytes in tge data payload by default.
+//                Pattern can be overridden.
+//            */
+//
+//            PacketConfig packetConfig = new PacketConfig(storage, new Strategy1(config));
+//
+//            if (config.isTrafficGen()) {
+//                ExecutorService executor = Executors.newFixedThreadPool(3);
+//                executor.submit(new TrafficGenerator(config));
+//                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
+//                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
+//            } else {
+//                ExecutorService executor = Executors.newFixedThreadPool(2);
+//                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
+//                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
+//            }
+//
+//        }
 
         /*
          * Generates the traffic with default config

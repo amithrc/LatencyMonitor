@@ -11,9 +11,9 @@ public class CaptureTraffic implements PacketReceiver {
     private Config config = null;
     private UniqueIDStrategy uniqueIDStrategy = null;
 
-    public CaptureTraffic(Config config, PacketConfig packetConfig) {
+    public CaptureTraffic(Config config, UniqueIDStrategy uniqueIDStrategy) {
         this.config = config;
-        this.uniqueIDStrategy = packetConfig.getUniqueIDStrategy();
+        this.uniqueIDStrategy = uniqueIDStrategy;
     }
 
     @Override
