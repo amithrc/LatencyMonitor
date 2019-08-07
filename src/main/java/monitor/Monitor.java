@@ -2,10 +2,10 @@ package main.java.monitor;
 
 
 import jpcap.JpcapCaptor;
-import main.java.monitor.SetupInterface.SetupInterface;
-import main.java.monitor.helper.Helper;
-import main.java.monitor.packetreceiver.CaptureTraffic;
-import main.java.monitor.packetreceiver.PacketConfig;
+import main.java.monitor.utils.SetupInterface;
+import main.java.monitor.utils.Helper;
+import main.java.monitor.utils.CaptureTraffic;
+import main.java.monitor.utils.PacketConfig;
 import main.java.monitor.packetreceiver.Receiver;
 import main.java.monitor.packetreceiver.Sender;
 import main.java.commandparser.Config;

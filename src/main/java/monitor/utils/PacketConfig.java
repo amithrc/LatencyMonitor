@@ -1,4 +1,4 @@
-package main.java.monitor.packetreceiver;
+package main.java.monitor.utils;
 
 import main.java.monitor.stratergy.storage.StorageStrategy;
 import main.java.monitor.stratergy.uniqueid.UniqueIDStrategy;

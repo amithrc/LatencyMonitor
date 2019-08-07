@@ -5,6 +5,7 @@ import jpcap.packet.Packet;
 import main.java.commandparser.Config;
 import main.java.monitor.stratergy.storage.StorageStrategy;
 import main.java.monitor.stratergy.uniqueid.UniqueIDStrategy;
+import main.java.monitor.utils.PacketConfig;
 
 
 public class Sender implements PacketReceiver {

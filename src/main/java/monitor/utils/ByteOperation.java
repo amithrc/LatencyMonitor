@@ -1,4 +1,4 @@
-package main.java.monitor.helper;
+package main.java.monitor.utils;
 
 import com.google.common.primitives.Bytes;
 

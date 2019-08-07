@@ -2,7 +2,7 @@ package main.java.monitor.stratergy.uniqueid;
 
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
-import main.java.monitor.helper.ByteOperation;
+import main.java.monitor.utils.ByteOperation;
 
 import java.util.Arrays;
 

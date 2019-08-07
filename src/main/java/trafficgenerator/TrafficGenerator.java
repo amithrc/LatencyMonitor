@@ -4,8 +4,8 @@ package main.java.trafficgenerator;
 import jpcap.JpcapSender;
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
-import main.java.monitor.SetupInterface.SetupInterface;
-import main.java.monitor.helper.ByteOperation;
+import main.java.monitor.utils.SetupInterface;
+import main.java.monitor.utils.ByteOperation;
 
 
 import java.io.IOException;
