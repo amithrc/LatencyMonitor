@@ -9,9 +9,7 @@ import main.java.commandparser.Config;
  * and the ID
  */
 
-public class PacketFilter {
-
-
+public class PacketFilter extends PacketFilterBase {
 
     private Config config = null;
     boolean isHardWareTimeStamp = (config.getTimeStampType() == Config.TimeStampType.HARDWARE_TIME_STAMP) ? true : false;
@@ -21,10 +19,8 @@ public class PacketFilter {
     }
 
 
+    @Override
     public PacketInfo getPacketInfo(Packet packet) {
-
-
-
         return null;
     }
 }

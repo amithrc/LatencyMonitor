@@ -49,7 +49,6 @@ public class ByteOperation {
 
     public static long getInteger(byte[] bytes) {
         return new BigInteger(bytes).longValue();
-
     }
 
 

@@ -1,9 +1,16 @@
 package main.java.monitor;
 
 
+import jpcap.JpcapCaptor;
+import main.java.monitor.packetconfig.PacketConfig;
+import main.java.monitor.packetconfig.PacketFilterTrafficGenerator;
+import main.java.monitor.packetreceiver.CaptureTraffic;
+import main.java.monitor.packetreceiver.Sender;
+import main.java.monitor.storage.Storage;
 import main.java.monitor.utils.Helper;
 import main.java.commandparser.Config;
 
+import main.java.monitor.utils.SetupInterface;
 import main.java.trafficgenerator.TrafficGenerator;
 
 import java.io.IOException;
@@ -50,7 +57,7 @@ public class Monitor {
     public void handle() throws IOException {
 
 
-        if(config.isVerboseEnabled())
+        if (config.isVerboseEnabled())
             printConfigInfo();
 
 
@@ -72,19 +79,15 @@ public class Monitor {
            Captures the traffic on the given interface
          */
 
-//        if (config.IsCaptureEnabled()) {
-//            printConfigInfo();
-//
-//            SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
-//            JpcapCaptor captureCaptor = captureinterface.getCaptor();
-//
-//            UniqueIDStrategy uniqueIDStrategy = getUniqueIDStrategy();
-//
-//            ExecutorService executor = Executors.newFixedThreadPool(2);
-//            executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, uniqueIDStrategy)));
-//            executor.submit(() -> captureCaptor.loopPacket(-1, new Sender(config, packetConfig)));
-//
-//        }
+        if (config.IsCaptureEnabled()) {
+
+            SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
+            JpcapCaptor captureCaptor = captureinterface.getCaptor();
+
+            ExecutorService executor = Executors.newFixedThreadPool(2);
+            executor.submit(new TrafficGenerator(config));
+            executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, new PacketFilterTrafficGenerator(config))));
+        }
 
 
 //        if (config.IsMonitorEnabled()) {

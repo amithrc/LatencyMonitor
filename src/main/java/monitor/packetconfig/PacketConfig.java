@@ -5,19 +5,19 @@ import main.java.monitor.storage.Storage;
 public class PacketConfig {
 
     private Storage storage = null;
-    private PacketFilter packetFilter = null;
+    private PacketFilterBase packetFilter = null;
 
 
-    public PacketConfig(Storage storage, PacketFilter packetID) {
+    public PacketConfig(Storage storage, PacketFilterBase packetFilter) {
         this.storage = storage;
-        this.packetFilter = packetID;
+        this.packetFilter = packetFilter;
     }
 
     public Storage getStorage() {
         return storage;
     }
 
-    public PacketFilter getPacketFilter() {
+    public PacketFilterBase getPacketFilter() {
         return packetFilter;
     }
 
