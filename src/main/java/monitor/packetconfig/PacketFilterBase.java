@@ -1,6 +1,7 @@
 package main.java.monitor.packetconfig;
 
 import jpcap.packet.Packet;
+import main.java.monitor.container.TimeStamp;
 
 /**
  * Abstract PacketFilter class which will return the PacketInfo object
@@ -9,6 +10,14 @@ import jpcap.packet.Packet;
  */
 
 abstract public class PacketFilterBase {
+
+
+    public long convertTimeUnit(boolean isHWTimeSTamp, TimeStamp timeStamp) {
+
+        return 0L;
+
+    }
+
 
     /**
      * Returns the packetInfo if the packet in question is part of the testing
