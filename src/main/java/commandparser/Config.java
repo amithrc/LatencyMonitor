@@ -25,6 +25,12 @@ public class Config {
         SOFTWARE_TIME_STAMP
     }
 
+    public enum TimeUnit {
+        MILLI_SEC,
+        MICRO_SEC,
+        NANO_SEC
+    }
+
 
     @Parameter(names = {"-is", "--interface-sender"}, description = "Tap line from the sender", required = false)
     private String interfaceSender;
@@ -47,22 +53,17 @@ public class Config {
     private Boolean isCaptureEnabled = false;
 
 
-
     @Parameter(names = {"-d", "--time-interval"}, description = "Program runs for this specified time and all the threads will exit gracefully")
     private int timeInterval = 60;
 
     @Parameter(names = {"-n", "--pack-count"}, description = "Number of packets to generate")
     private int numberOfPackets = 500;
 
-
     @Parameter(names = {"-S", "--sleep-time"}, description = "Thread sleep time, relevant to generate traffic")
     private int threadSleepTime = 1;
 
-    @Parameter(names = {"--uid-strategy"}, description = "Strategy to fetch the unique ID per packet")
-    private int uidstrategy = 1;
-
-    @Parameter(names = {"--storage-strategy"}, description = "Storage strategy")
-    private int storagestrategy = 1;
+    @Parameter(names = {"-t", "--time-unit"}, description = "Time unit (ms,us,ns)")
+    private String timeUnit = "us";
 
 
     @Parameter(names = {"--uid-pattern"}, description = "Unique ID pattern")
@@ -89,6 +90,15 @@ public class Config {
         return interfaceSender;
     }
 
+    public TimeUnit getTimeUnit() {
+        if ("ms".equalsIgnoreCase(timeUnit)) {
+            return TimeUnit.MILLI_SEC;
+        } else if ("ns".equalsIgnoreCase(timeUnit)) {
+            return TimeUnit.NANO_SEC;
+        }
+        return TimeUnit.MICRO_SEC;
+    }
+
     public String getInterfaceReceiver() {
         return interfaceReceiver;
     }
@@ -99,6 +109,16 @@ public class Config {
         }
         return TimeStampType.SOFTWARE_TIME_STAMP;
     }
+
+    public String getUnitString() {
+        if ("ms".equalsIgnoreCase(timeUnit)) {
+            return "ms";
+        } else if ("ns".equalsIgnoreCase(timeUnit)) {
+            return "ns";
+        }
+        return "us";
+    }
+
 
     public int getNumberOfPackets() {
         return numberOfPackets;
@@ -116,15 +136,6 @@ public class Config {
         return uidpattern.length();
 
     }
-
-    public int getUidStrategy() {
-        return uidstrategy;
-    }
-
-    public int getStoragestrategy() {
-        return storagestrategy;
-    }
-
 
     public boolean isTrafficGen() {
         return isTrafficGen;
@@ -155,7 +166,6 @@ public class Config {
     public int getTimeInterval() {
         return timeInterval;
     }
-
 
 
     public Boolean IsCaptureEnabled() {

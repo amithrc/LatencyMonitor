@@ -10,12 +10,16 @@ import java.util.Arrays;
 public class PacketFilterTrafficGenerator extends PacketFilterBase {
 
     private Config config = null;
-    //boolean isHardWareTimeStamp = (config.getTimeStampType() == Config.TimeStampType.HARDWARE_TIME_STAMP) ? true : false;
+    private boolean isHw = false;
 
     public PacketFilterTrafficGenerator(Config config) {
         this.config = config;
-    }
 
+        if (config.getTimeStampType() == Config.TimeStampType.HARDWARE_TIME_STAMP) {
+            isHw = true;
+        }
+        System.out.println("IsHardWare:" + isHw);
+    }
 
     @Override
     public PacketInfo getPacketInfo(Packet packet) {
@@ -25,9 +29,11 @@ public class PacketFilterTrafficGenerator extends PacketFilterBase {
         String uid = new String(uuidSlice);
 
         PacketInfo info = null;
+
         if (uid.equalsIgnoreCase(config.getUidpattern())) {
             long iid = ByteOperation.getInteger(iidSlice);
-            info = new PacketInfo(iid, new TimeStamp(packet.sec, packet.usec, 0L));
+            long res = convertTimeUnit(isHw, config.getTimeUnit(), packet.sec, packet.usec);
+            info = new PacketInfo(iid, new TimeStamp(packet.sec, packet.usec, res));
         }
         return info;
     }

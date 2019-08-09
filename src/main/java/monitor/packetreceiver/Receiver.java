@@ -3,6 +3,8 @@ package main.java.monitor.packetreceiver;
 import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
+import main.java.monitor.container.TimeStamp;
+import main.java.monitor.container.TimeStampContainer;
 import main.java.monitor.packetconfig.PacketConfig;
 import main.java.monitor.packetconfig.PacketFilterBase;
 import main.java.monitor.packetconfig.PacketInfo;
@@ -28,7 +30,14 @@ public class Receiver implements PacketReceiver {
     public void receivePacket(Packet packet) {
 
         PacketInfo packetInfo = filter.getPacketInfo(packet);
+        if (packetInfo != null) {
+            TimeStamp T2 = packetInfo.getTimeStamp();
+            long id = packetInfo.getPacketID();
+            TimeStampContainer ts = table.getPacket(packetInfo.getPacketID(), T2);
+            long t1 = ts.getT1().getResultTimeUnit();
+            long t2 = T2.getResultTimeUnit();
 
-
+            System.out.println("Packet ID: " + id + " RTT: " + (t2 - t1) + "  " + config.getUnitString());
+        }
     }
 }

@@ -1,7 +1,8 @@
 package main.java.monitor.packetconfig;
 
 import jpcap.packet.Packet;
-import main.java.monitor.container.TimeStamp;
+import main.java.commandparser.Config;
+
 
 /**
  * Abstract PacketFilter class which will return the PacketInfo object
@@ -12,10 +13,30 @@ import main.java.monitor.container.TimeStamp;
 abstract public class PacketFilterBase {
 
 
-    public long convertTimeUnit(boolean isHWTimeSTamp, TimeStamp timeStamp) {
+    /**
+     * Converts the given time to the time unit passed in.
+     *
+     * @param isHWTimeSTamp
+     * @param sec
+     * @param usec
+     * @return returns the converted time
+     */
+    long convertTimeUnit(boolean isHWTimeSTamp, Config.TimeUnit timeUnit, long sec, long usec) {
+        long convertedValue = 0L;
 
-        return 0L;
-
+        if (timeUnit == Config.TimeUnit.MICRO_SEC) {
+            long secres = sec * 1000000;
+            convertedValue = secres + (isHWTimeSTamp ? (usec / 1000) : usec);
+        } else if (timeUnit == Config.TimeUnit.NANO_SEC) {
+            long secres = sec * 1000000000;
+            convertedValue = secres + (isHWTimeSTamp ? usec : usec * 1000);
+        } else if (timeUnit == Config.TimeUnit.MILLI_SEC) {
+            long secres = sec * 1000;
+            convertedValue = secres + (isHWTimeSTamp ? (usec / 1000000) : (usec / 1000));
+        } else {
+            convertTimeUnit(isHWTimeSTamp, Config.TimeUnit.NANO_SEC, sec, usec);
+        }
+        return convertedValue;
     }
 
 

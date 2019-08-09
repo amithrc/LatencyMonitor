@@ -5,12 +5,12 @@ public class TimeStamp {
 
     private long seconds;
     private long microNanoseconds;
-    private long nanosecond = 0L;
+    private long resultTimeUnit = 0L;
 
-    public TimeStamp(long seconds, long microNanoseconds, long nanosecond) {
+    public TimeStamp(long seconds, long microNanoseconds, long resultTimeUnit) {
         this.seconds = seconds;
         this.microNanoseconds = microNanoseconds;
-        this.nanosecond = nanosecond;
+        this.resultTimeUnit = resultTimeUnit;
     }
 
     public long getSeconds() {
@@ -21,7 +21,7 @@ public class TimeStamp {
         return microNanoseconds;
     }
 
-    public long getNanosecond() {
-        return nanosecond;
+    public long getResultTimeUnit() {
+        return resultTimeUnit;
     }
 }

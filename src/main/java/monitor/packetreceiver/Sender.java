@@ -3,6 +3,7 @@ package main.java.monitor.packetreceiver;
 import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
+import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.PacketConfig;
 import main.java.monitor.packetconfig.PacketFilterBase;
 import main.java.monitor.packetconfig.PacketInfo;
@@ -31,12 +32,14 @@ public class Sender implements PacketReceiver {
      */
     @Override
     public void receivePacket(Packet packet) {
+
         PacketInfo info = filter.getPacketInfo(packet);
 
-        if (!table.addPacket(info.getPacketID(), info.getTimeStamp())) {
-            System.out.println("Error adding the packet: " + info.getPacketID());
+        if (info != null) {
+            System.out.println("Packet : " + info.getPacketID());
+            if (!table.addPacket(info.getPacketID(), info.getTimeStamp())) {
+                System.out.println("Error adding the packet: " + info.getPacketID());
+            }
         }
-
-        System.out.println("Packet : "+ info.getPacketID());
     }
 }

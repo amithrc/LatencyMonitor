@@ -5,6 +5,7 @@ import jpcap.JpcapCaptor;
 import main.java.monitor.packetconfig.PacketConfig;
 import main.java.monitor.packetconfig.PacketFilterTrafficGenerator;
 import main.java.monitor.packetreceiver.CaptureTraffic;
+import main.java.monitor.packetreceiver.Receiver;
 import main.java.monitor.packetreceiver.Sender;
 import main.java.monitor.storage.Storage;
 import main.java.monitor.utils.Helper;
@@ -90,46 +91,45 @@ public class Monitor {
         }
 
 
-//        if (config.IsMonitorEnabled()) {
-//
-//            log.log(Level.FINEST, "Started Latency Monitor...");
-//
-//            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
-//            JpcapCaptor senderCaptor = senderInterface.getCaptor();
-//
-//
-//            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
-//            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
-//
-//            log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:" + receiverInterface.getInterfaceName());
-//
-//
-//            StorageStrategy storage = getStorageStrategy();
-//
-//            if (storage == null) {
-//                log.log(Level.SEVERE, "Cannot allocate memory for storing the packets, exiting..");
-//                System.exit(-1);
-//            }
-//
-//            /*
-//                if --traffic-generator is enabled, programs creates the packets by adding FF FF FF FF the first 4 bytes in tge data payload by default.
-//                Pattern can be overridden.
-//            */
-//
-//            PacketConfig packetConfig = new PacketConfig(storage, new Strategy1(config));
-//
-//            if (config.isTrafficGen()) {
-//                ExecutorService executor = Executors.newFixedThreadPool(3);
-//                executor.submit(new TrafficGenerator(config));
-//                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
-//                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
-//            } else {
-//                ExecutorService executor = Executors.newFixedThreadPool(2);
-//                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
-//                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, storage)));
-//            }
-//
-//        }
+        if (config.IsMonitorEnabled()) {
+
+            log.log(Level.FINEST, "Started Latency Monitor...");
+
+            SetupInterface senderInterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
+            JpcapCaptor senderCaptor = senderInterface.getCaptor();
+
+
+            SetupInterface receiverInterface = new SetupInterface(config.getInterfaceReceiver(), config.getTimeStampType(), log);
+            JpcapCaptor receiverCaptor = receiverInterface.getCaptor();
+
+            log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:" + receiverInterface.getInterfaceName());
+
+
+            Storage storage = new Storage(log);
+
+            if (storage == null) {
+                log.log(Level.SEVERE, "Cannot allocate memory for storing the packets, exiting..");
+                System.exit(-1);
+            }
+
+            /*
+                if --traffic-generator is enabled, programs creates the packets by adding FF FF FF FF the first 4 bytes in tge data payload by default.
+                Pattern can be overridden.
+            */
+
+            PacketConfig packetConfig = new PacketConfig(storage, new PacketFilterTrafficGenerator(config));
+
+            if (config.isTrafficGen()) {
+                ExecutorService executor = Executors.newFixedThreadPool(3);
+                executor.submit(new TrafficGenerator(config));
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
+                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
+            } else {
+                ExecutorService executor = Executors.newFixedThreadPool(2);
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
+                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
+            }
+        }
 
         /*
          * Generates the traffic with default config
