@@ -1,7 +1,8 @@
-package main.java.monitor.packetconfig;
+package main.java.monitor.packetconfig.filter;
 
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
+import main.java.monitor.packetconfig.PacketInfo;
 
 
 /**
@@ -21,7 +22,7 @@ abstract public class PacketFilterBase {
      * @param usec
      * @return returns the converted time
      */
-    long convertTimeUnit(boolean isHWTimeSTamp, Config.TimeUnit timeUnit, long sec, long usec) {
+    protected long convertTimeUnit(boolean isHWTimeSTamp, Config.TimeUnit timeUnit, long sec, long usec) {
         long convertedValue = 0L;
 
         if (timeUnit == Config.TimeUnit.MICRO_SEC) {

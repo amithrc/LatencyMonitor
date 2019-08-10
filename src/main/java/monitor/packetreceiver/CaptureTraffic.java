@@ -4,7 +4,7 @@ import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
-import main.java.monitor.packetconfig.PacketFilterBase;
+import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.packetconfig.PacketInfo;
 
 

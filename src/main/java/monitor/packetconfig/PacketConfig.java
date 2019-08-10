@@ -1,5 +1,6 @@
 package main.java.monitor.packetconfig;
 
+import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.storage.Storage;
 
 public class PacketConfig {

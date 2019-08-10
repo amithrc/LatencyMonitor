@@ -3,7 +3,7 @@ package main.java.monitor;
 
 import jpcap.JpcapCaptor;
 import main.java.monitor.packetconfig.PacketConfig;
-import main.java.monitor.packetconfig.PacketFilterTrafficGenerator;
+import main.java.monitor.packetconfig.filter.PacketFilterTrafficGenerator;
 import main.java.monitor.packetreceiver.CaptureTraffic;
 import main.java.monitor.packetreceiver.Receiver;
 import main.java.monitor.packetreceiver.Sender;

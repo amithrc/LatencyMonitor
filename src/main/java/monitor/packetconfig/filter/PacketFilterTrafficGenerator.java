@@ -1,8 +1,9 @@
-package main.java.monitor.packetconfig;
+package main.java.monitor.packetconfig.filter;
 
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
+import main.java.monitor.packetconfig.PacketInfo;
 import main.java.monitor.utils.ByteOperation;
 
 import java.util.Arrays;
@@ -18,7 +19,6 @@ public class PacketFilterTrafficGenerator extends PacketFilterBase {
         if (config.getTimeStampType() == Config.TimeStampType.HARDWARE_TIME_STAMP) {
             isHw = true;
         }
-        System.out.println("IsHardWare:" + isHw);
     }
 
     @Override
