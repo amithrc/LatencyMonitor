@@ -10,7 +10,6 @@ import java.util.Arrays;
 public class ByteOperation {
 
 
-
     /**
      * Returns the bytes taking the string as argument
      *
@@ -60,6 +59,11 @@ public class ByteOperation {
             sb.append(String.format("%02x", b));
         }
         return "0x" + sb.toString();
+    }
+
+    public static String getEtherType(byte[] packetHeader) {
+        byte[] etherSlice = Arrays.copyOfRange(packetHeader, 12, 14);
+        return ByteOperation.getHexValue(etherSlice);
     }
 
 
