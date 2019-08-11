@@ -62,6 +62,9 @@ public class Config {
     @Parameter(names = {"-S", "--sleep-time"}, description = "Thread sleep time, relevant to generate traffic")
     private int threadSleepTime = 1;
 
+    @Parameter(names = {"-f", "--filter-type"}, description = "Filter type to apply, Spirent 1, Traffic Generator 2")
+    private int filterType = 1;
+
     @Parameter(names = {"-t", "--time-unit"}, description = "Time unit (ms,us,ns)")
     private String timeUnit = "us";
 
@@ -117,6 +120,10 @@ public class Config {
             return "ns";
         }
         return "us";
+    }
+
+    public int getFilterType() {
+        return filterType;
     }
 
 

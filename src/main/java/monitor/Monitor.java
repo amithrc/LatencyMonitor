@@ -3,6 +3,8 @@ package main.java.monitor;
 
 import jpcap.JpcapCaptor;
 import main.java.monitor.packetconfig.PacketConfig;
+import main.java.monitor.packetconfig.filter.PacketFilterBase;
+import main.java.monitor.packetconfig.filter.PacketFilterSpirent;
 import main.java.monitor.packetconfig.filter.PacketFilterTrafficGenerator;
 import main.java.monitor.packetreceiver.CaptureTraffic;
 import main.java.monitor.packetreceiver.Receiver;
@@ -48,6 +50,16 @@ public class Monitor {
         log.log(Level.FINEST, "Receiver Interface: " + config.getInterfaceSender());
         String res = config.getTimeStampType().toString().equalsIgnoreCase("hardware") ? "hardware" : "software";
         log.log(Level.FINEST, "Time-stamp-type: " + res);
+    }
+
+    private PacketFilterBase getFilterType() {
+
+        if (config.getFilterType() == 1) {
+            return new PacketFilterSpirent(config);
+        } else if (config.getFilterType() == 2) {
+            return new PacketFilterTrafficGenerator(config);
+        }
+        return null;
     }
 
 
@@ -105,6 +117,9 @@ public class Monitor {
             log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:" + receiverInterface.getInterfaceName());
 
 
+            /*
+            Allocate Storage , this shared between two threads.
+            */
             Storage storage = new Storage(log);
 
             if (storage == null) {
@@ -117,7 +132,8 @@ public class Monitor {
                 Pattern can be overridden.
             */
 
-            PacketConfig packetConfig = new PacketConfig(storage, new PacketFilterTrafficGenerator(config));
+            PacketFilterBase filterBase = getFilterType();
+            PacketConfig packetConfig = new PacketConfig(storage, filterBase);
 
             if (config.isTrafficGen()) {
                 ExecutorService executor = Executors.newFixedThreadPool(3);
@@ -134,7 +150,7 @@ public class Monitor {
         /*
          * Generates the traffic with default config
          */
-        if (config.isTrafficGen()) {
+        if (config.isTrafficGen() && !config.IsMonitorEnabled()) {
             log.log(Level.FINEST, "Generating Traffic....");
             ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.submit(new TrafficGenerator(config));

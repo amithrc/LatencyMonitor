@@ -2,11 +2,14 @@ package main.java.monitor.utils;
 
 import com.google.common.primitives.Bytes;
 
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class ByteOperation {
+
+
 
     /**
      * Returns the bytes taking the string as argument
@@ -49,6 +52,14 @@ public class ByteOperation {
 
     public static long getInteger(byte[] bytes) {
         return new BigInteger(bytes).longValue();
+    }
+
+    public static String getHexValue(byte[] byteVal) {
+        StringBuilder sb = new StringBuilder(byteVal.length * 2);
+        for (byte b : byteVal) {
+            sb.append(String.format("%02x", b));
+        }
+        return "0x" + sb.toString();
     }
 
 
