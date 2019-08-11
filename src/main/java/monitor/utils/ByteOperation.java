@@ -49,7 +49,7 @@ public class ByteOperation {
         return concatByteArray(destinationMac, sourceMac, ethertype);
     }
 
-    public static long getInteger(byte[] bytes) {
+    public static long getLongID(byte[] bytes) {
         return new BigInteger(bytes).longValue();
     }
 

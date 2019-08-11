@@ -122,6 +122,13 @@ public class Config {
         return "us";
     }
 
+    public String getTimeStampTypeString() {
+        if ("hardware".equalsIgnoreCase(timeStampType)) {
+            return "Hardware";
+        }
+        return "Software";
+    }
+
     public int getFilterType() {
         return filterType;
     }
