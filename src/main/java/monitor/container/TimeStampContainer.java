@@ -3,6 +3,8 @@ package main.java.monitor.container;
 
 /**
  * Time Stamp Container which contains T1 and T2 and the calculated difference
+ * @author Amith
+ * @version  8/11/2019
  */
 public class TimeStampContainer {
 

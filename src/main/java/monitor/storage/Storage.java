@@ -11,29 +11,33 @@ public class Storage {
     private Logger logger = null;
     private LinkedHashMap<Long, TimeStampContainer> table = null;
 
+    public LinkedHashMap<Long, TimeStampContainer> getTable() {
+        return table;
+    }
+
     public Storage(Logger logger) {
 
         table = new LinkedHashMap<>();
         this.logger = logger;
     }
 
-    synchronized public boolean addPacket(Long id, TimeStamp T1) {
-        TimeStampContainer container = new TimeStampContainer();
-        container.setT1(T1);
 
-        TimeStampContainer stamp = table.put(id, container);
-        if (stamp != null) {
-            return true;
-        }
-        return false;
-    }
+    synchronized public void addPacket(Long id, TimeStamp timeStamp, boolean isSender) {
 
-    synchronized public TimeStampContainer getPacket(Long id, TimeStamp T2) {
-        if (table.containsKey(id)) {
-            TimeStampContainer container = table.get(id);
-            container.setT2(T2);
-            return container;
+        if (isSender) { //case 2
+            if (table.containsKey(id)) {
+                table.get(id).setT1(timeStamp);
+            } else { //case 1
+                TimeStampContainer container = new TimeStampContainer();
+                container.setT1(timeStamp);
+                table.put(id, container);
+
+            }
+
+        } else { //case 1
+            TimeStampContainer container = new TimeStampContainer();
+            container.setT2(timeStamp);
+            table.put(id, container);
         }
-        return null;
     }
 }

@@ -26,18 +26,20 @@ public class Receiver implements PacketReceiver {
 
     }
 
+    synchronized public boolean hasPacket(long id) {
+        return table.getTable().containsKey(id);
+    }
+
     @Override
     public void receivePacket(Packet packet) {
 
         PacketInfo packetInfo = filter.getPacketInfo(packet);
         if (packetInfo != null) {
-            TimeStamp T2 = packetInfo.getTimeStamp();
-            long id = packetInfo.getPacketID();
-            TimeStampContainer ts = table.getPacket(packetInfo.getPacketID(), T2);
-            long t1 = ts.getT1().getResultTimeUnit();
-            long t2 = T2.getResultTimeUnit();
-
-            System.out.println("Packet ID: " + id + " RTT: " + (t2 - t1) + "  " + config.getUnitString());
+            if (hasPacket(packetInfo.getPacketID())) {
+                table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), false);
+            } else {
+                table.getTable().get(packetInfo.getPacketID()).setT2(packetInfo.getTimeStamp());
+            }
         }
     }
 }

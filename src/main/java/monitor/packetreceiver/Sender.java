@@ -32,13 +32,11 @@ public class Sender implements PacketReceiver {
     @Override
     public void receivePacket(Packet packet) {
 
-        PacketInfo info = filter.getPacketInfo(packet);
+        PacketInfo packetInfo = filter.getPacketInfo(packet);
 
-        if (info != null) {
-            System.out.println("Packet : " + info.getPacketID());
-            if (!table.addPacket(info.getPacketID(), info.getTimeStamp())) {
-                System.out.println("Error adding the packet: " + info.getPacketID());
-            }
+        if (packetInfo != null) {
+            System.out.println("Packet : " + packetInfo.getPacketID());
+            table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), true);
         }
     }
 }
