@@ -47,13 +47,14 @@ public class Sender implements PacketReceiver {
             System.out.println("Packet Sender: " + packetID);
 
             if (table.hasPacket(packetID)) {
-                //DO stats
-                //synchronized (this.writer)
-                //{
-
-
-                //}
                 System.out.println("Sender Side Packet ID: "+ packetID + " RTT:"+ (table.getTable().get(packetID).getT2().getResultTimeUnit()- timeStamp.getResultTimeUnit()));
+                try {
+                    writer.write("Sender Side Packet ID: "+ packetID + " RTT:"+ (table.getTable().get(packetID).getT2().getResultTimeUnit()- timeStamp.getResultTimeUnit())+"\n");
+                    writer.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 table.getTable().remove(packetID);
             } else {
                 table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), true);

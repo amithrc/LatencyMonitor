@@ -40,12 +40,14 @@ public class Receiver implements PacketReceiver {
             long id = packetInfo.getPacketID();
             System.out.println("Packet receiver: " + packetInfo.getPacketID());
             if (table.hasPacket(packetInfo.getPacketID())) {
-
-                //synchronized (this.writer)
-                //{
-
-                //}
                 System.out.println("Receiver side Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString());
+
+                try {
+                    writer.write("Receiver side Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString());
+                    writer.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 table.getTable().remove(id);
             } else {
                 table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), false);
