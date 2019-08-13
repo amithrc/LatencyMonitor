@@ -48,10 +48,10 @@ public class Sender implements PacketReceiver {
                 TimeStamp T2 = table.getTable().get(packetID).getT2();
                 if (config.isStdOutEnabled()) {
                     System.out.println("Packet received on sender Interface: " + packetID);
-                    System.out.println("Packet ID: " + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit())+ " " + config.getUnitString());
+                    System.out.println("Packet ID: " + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString());
                 }
                 try {
-                    writer.write("PacketID:" + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " "+ config.getUnitString()+ "\n");
+                    writer.write("PacketID:" + packetID + "," + "RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString() + "\n");
                     writer.flush();
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -50,7 +50,7 @@ public class Receiver implements PacketReceiver {
                 }
 
                 try {
-                    writer.write("PacketID:" + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString() + "\n");
+                    writer.write("PacketID:" + packetID + "," + "RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString() + "\n");
                     writer.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
