@@ -43,7 +43,7 @@ public class Receiver implements PacketReceiver {
                 System.out.println("Receiver side Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString());
 
                 try {
-                    writer.write("Receiver side Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString());
+                    writer.write("Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString()+"\n");
                     writer.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
