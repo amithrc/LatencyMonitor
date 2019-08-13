@@ -6,7 +6,6 @@ import main.java.monitor.packetconfig.PacketConfig;
 import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.packetconfig.filter.PacketFilterSpirent;
 import main.java.monitor.packetconfig.filter.PacketFilterTrafficGenerator;
-import main.java.monitor.packetreceiver.CalculationManager;
 import main.java.monitor.packetreceiver.CaptureTraffic;
 import main.java.monitor.packetreceiver.Receiver;
 import main.java.monitor.packetreceiver.Sender;
@@ -142,10 +141,9 @@ public class Monitor {
                 executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
                 executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
             } else {
-                ExecutorService executor = Executors.newFixedThreadPool(3);
+                ExecutorService executor = Executors.newFixedThreadPool(2);
                 executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
                 executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
-                executor.submit(new CalculationManager(config, storage));
             }
         }
 

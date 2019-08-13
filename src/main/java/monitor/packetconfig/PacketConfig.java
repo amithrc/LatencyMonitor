@@ -22,7 +22,7 @@ public class PacketConfig {
 
         try
         {
-            this.writer = new BufferedWriter(new FileWriter(new File("latencyFile")));
+            this.writer = new BufferedWriter(new FileWriter(new File("latencyFile.csv")));
         }catch(IOException io)
         {
             io.getStackTrace();

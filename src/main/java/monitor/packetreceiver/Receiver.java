@@ -27,30 +27,37 @@ public class Receiver implements PacketReceiver {
         this.config = config;
         this.table = packetConfig.getStorage();
         this.filter = packetConfig.getPacketFilter();
-        this.writer=packetConfig.getWriter();
+        this.writer = packetConfig.getWriter();
 
     }
-
 
     @Override
     public void receivePacket(Packet packet) {
 
         PacketInfo packetInfo = filter.getPacketInfo(packet);
         if (packetInfo != null) {
-            long id = packetInfo.getPacketID();
-            System.out.println("Packet receiver: " + packetInfo.getPacketID());
+
+            long packetID = packetInfo.getPacketID();
+            TimeStamp T2 = packetInfo.getTimeStamp();
+
+
             if (table.hasPacket(packetInfo.getPacketID())) {
-                System.out.println("Receiver side Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString());
+                TimeStamp T1 = table.getTable().get(packetID).getT1();
+
+                if (config.isStdOutEnabled()) {
+                    System.out.println("Packet received on receiver Interface: " + packetID);
+                    System.out.println("PacketID:" + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString());
+                }
 
                 try {
-                    writer.write("Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString()+"\n");
+                    writer.write("PacketID:" + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString() + "\n");
                     writer.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                table.getTable().remove(id);
+                table.removePacket(packetID);
             } else {
-                table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), false);
+                table.addPacket(packetID, T2, false);
             }
         }
     }

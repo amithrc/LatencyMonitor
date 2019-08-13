@@ -25,15 +25,18 @@ public class Storage {
         return table.containsKey(id);
     }
 
+    synchronized public void removePacket(long packetID) {
+        table.remove(packetID);
+    }
+
 
     synchronized public void addPacket(Long id, TimeStamp timeStamp, boolean isSender) {
 
-        if (isSender) { //case 2
+        if (isSender) {
             TimeStampContainer container = new TimeStampContainer();
             container.setT1(timeStamp);
             table.put(id, container);
-            }
-         else { //case 1
+        } else {
             TimeStampContainer container = new TimeStampContainer();
             container.setT2(timeStamp);
             table.put(id, container);
