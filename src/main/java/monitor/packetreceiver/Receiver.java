@@ -10,6 +10,9 @@ import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.packetconfig.PacketInfo;
 import main.java.monitor.storage.Storage;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 
 public class Receiver implements PacketReceiver {
 
@@ -18,27 +21,34 @@ public class Receiver implements PacketReceiver {
 
     private Storage table = null;
     private PacketFilterBase filter = null;
+    private BufferedWriter writer = null;
 
     public Receiver(Config config, PacketConfig packetConfig) {
         this.config = config;
         this.table = packetConfig.getStorage();
         this.filter = packetConfig.getPacketFilter();
+        this.writer=packetConfig.getWriter();
 
     }
 
-    synchronized public boolean hasPacket(long id) {
-        return table.getTable().containsKey(id);
-    }
 
     @Override
     public void receivePacket(Packet packet) {
 
         PacketInfo packetInfo = filter.getPacketInfo(packet);
         if (packetInfo != null) {
-            if (hasPacket(packetInfo.getPacketID())) {
-                table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), false);
+            long id = packetInfo.getPacketID();
+            System.out.println("Packet receiver: " + packetInfo.getPacketID());
+            if (table.hasPacket(packetInfo.getPacketID())) {
+
+                //synchronized (this.writer)
+                //{
+
+                //}
+                System.out.println("Receiver side Packet ID: "+id +" RTT:"+ (packetInfo.getTimeStamp().getResultTimeUnit() - table.getTable().get(id).getT1().getResultTimeUnit())+" "+config.getUnitString());
+                table.getTable().remove(id);
             } else {
-                table.getTable().get(packetInfo.getPacketID()).setT2(packetInfo.getTimeStamp());
+                table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), false);
             }
         }
     }

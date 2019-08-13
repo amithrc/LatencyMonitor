@@ -3,10 +3,14 @@ package main.java.monitor.packetreceiver;
 import jpcap.PacketReceiver;
 import jpcap.packet.Packet;
 import main.java.commandparser.Config;
+import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.PacketConfig;
 import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.packetconfig.PacketInfo;
 import main.java.monitor.storage.Storage;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 
 public class Sender implements PacketReceiver {
@@ -15,12 +19,14 @@ public class Sender implements PacketReceiver {
 
     private Storage table = null;
     private PacketFilterBase filter = null;
+    private BufferedWriter writer=null;
 
 
     public Sender(Config config, PacketConfig packetConfig) {
         this.config = config;
         this.table = packetConfig.getStorage();
         this.filter = packetConfig.getPacketFilter();
+        this.writer=packetConfig.getWriter();
     }
 
     /**
@@ -35,8 +41,23 @@ public class Sender implements PacketReceiver {
         PacketInfo packetInfo = filter.getPacketInfo(packet);
 
         if (packetInfo != null) {
-            System.out.println("Packet : " + packetInfo.getPacketID());
-            table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), true);
+
+            long packetID = packetInfo.getPacketID();
+            TimeStamp timeStamp = packetInfo.getTimeStamp();
+            System.out.println("Packet Sender: " + packetID);
+
+            if (table.hasPacket(packetID)) {
+                //DO stats
+                //synchronized (this.writer)
+                //{
+
+
+                //}
+                System.out.println("Sender Side Packet ID: "+ packetID + " RTT:"+ (table.getTable().get(packetID).getT2().getResultTimeUnit()- timeStamp.getResultTimeUnit()));
+                table.getTable().remove(packetID);
+            } else {
+                table.addPacket(packetInfo.getPacketID(), packetInfo.getTimeStamp(), true);
+            }
         }
     }
 }

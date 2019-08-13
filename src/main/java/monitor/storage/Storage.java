@@ -21,20 +21,19 @@ public class Storage {
         this.logger = logger;
     }
 
+    synchronized public boolean hasPacket(long id) {
+        return table.containsKey(id);
+    }
+
 
     synchronized public void addPacket(Long id, TimeStamp timeStamp, boolean isSender) {
 
         if (isSender) { //case 2
-            if (table.containsKey(id)) {
-                table.get(id).setT1(timeStamp);
-            } else { //case 1
-                TimeStampContainer container = new TimeStampContainer();
-                container.setT1(timeStamp);
-                table.put(id, container);
-
+            TimeStampContainer container = new TimeStampContainer();
+            container.setT1(timeStamp);
+            table.put(id, container);
             }
-
-        } else { //case 1
+         else { //case 1
             TimeStampContainer container = new TimeStampContainer();
             container.setT2(timeStamp);
             table.put(id, container);

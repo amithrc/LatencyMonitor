@@ -43,7 +43,7 @@ public class PacketFilterSpirent extends PacketFilterBase {
         if (ether.equals(Constants.VLAN)) {
             byte[] packetIDSlice = Arrays.copyOfRange(packet.data, 8, 10);
             long packetID = ByteOperation.getLongID(packetIDSlice);
-            System.out.println("Ether Type: " + ether + " Packet ID:" + packetID);
+            //System.out.println("Ether Type: " + ether + " Packet ID:" + packetID);
             long res = convertTimeUnit(isHw, config.getTimeUnit(), packet.sec, packet.usec);
             info = new PacketInfo(packetID, new TimeStamp(packet.sec, packet.usec, res));
         }

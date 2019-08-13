@@ -18,20 +18,21 @@ public class CalculationManager implements Runnable {
     public CalculationManager(Config config, Storage table) {
         this.config = config;
         this.table = table;
+        System.out.println("IN constructor");
     }
 
 
-    synchronized void doStatistics() {
+    private synchronized void doStatistics() {
+
 
         for (Long packetID : table.getTable().keySet()) {
+            System.out.println("After for loop");
             TimeStampContainer container = table.getTable().get(packetID);
             if (container.getT1() != null && container.getT2() != null) {
                 System.out.println("Packet ID :" + packetID + " RTT:" + (container.getT2().getResultTimeUnit() - container.getT1().getResultTimeUnit()) + " " + config.getUnitString());
                 table.getTable().remove(packetID);
             }
-
         }
-
     }
 
     @Override
