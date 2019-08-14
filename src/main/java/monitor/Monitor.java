@@ -5,6 +5,7 @@ import jpcap.JpcapCaptor;
 import main.java.monitor.packetconfig.PacketConfig;
 import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.packetconfig.filter.PacketFilterSpirent;
+import main.java.monitor.packetconfig.filter.PacketFilterSpirentType2;
 import main.java.monitor.packetconfig.filter.PacketFilterTrafficGenerator;
 import main.java.monitor.packetreceiver.CaptureTraffic;
 import main.java.monitor.packetreceiver.Receiver;
@@ -58,6 +59,8 @@ public class Monitor {
             return new PacketFilterSpirent(config);
         } else if (config.getFilterType() == 2) {
             return new PacketFilterTrafficGenerator(config);
+        } else if (config.getFilterType() == 3) {
+            return new PacketFilterSpirentType2(config);
         }
         return null;
     }
@@ -97,8 +100,7 @@ public class Monitor {
             SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
             JpcapCaptor captureCaptor = captureinterface.getCaptor();
 
-            ExecutorService executor = Executors.newFixedThreadPool(2);
-            executor.submit(new TrafficGenerator(config));
+            ExecutorService executor = Executors.newFixedThreadPool(1);
             executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, getFilterType())));
         }
 

@@ -12,6 +12,7 @@ import java.util.logging.SimpleFormatter;
 /**
  * Command Parser which reads the args and returns the config class which holds all the
  * values and its sets up the Logger globally
+ * @author Amith
  */
 public class CommandParser {
 

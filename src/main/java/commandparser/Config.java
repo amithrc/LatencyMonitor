@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 /**
  * Config class which holds all the command line options and its values
+ * @author Amith
  */
 
 @Parameters(separators = "=", commandDescription = "Latency monitor")
@@ -28,7 +29,7 @@ public class Config {
     public enum TimeUnit {
         MILLI_SEC,
         MICRO_SEC,
-        NANO_SEC
+        NANO_SEC,
     }
 
 

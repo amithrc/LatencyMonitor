@@ -1,6 +1,11 @@
 package main.java.monitor.container;
 
-
+/**
+ * This class holds the timestamp of the packet.
+ * For each packet there will be a timestamp, the resultTimeUnit field holds the converted value based on the User input. Either ms,us,ns
+ *
+ * @author Amith
+ */
 public class TimeStamp {
 
     private long seconds;

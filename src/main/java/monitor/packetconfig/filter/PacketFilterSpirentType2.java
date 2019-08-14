@@ -10,25 +10,13 @@ import main.java.monitor.utils.Constants;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-
-/**
- * Filters out the packet that comes out of the Spirent.
- * Specifically, it captures the Identification fielf of IPv4 header to get the packet ID and convert them back to long
- *
- * @author Amith
- */
-public class PacketFilterSpirent extends PacketFilterBase {
+public class PacketFilterSpirentType2 extends PacketFilterBase {
 
     private Config config = null;
     private Logger logger = null;
     private boolean isHw = false;
 
-    /**
-     * Constructor that takes config as argument.
-     *
-     * @param config
-     */
-    public PacketFilterSpirent(Config config) {
+    public PacketFilterSpirentType2(Config config) {
         this.config = config;
 
         if (config.getTimeStampType() == Config.TimeStampType.HARDWARE_TIME_STAMP) {
@@ -38,14 +26,9 @@ public class PacketFilterSpirent extends PacketFilterBase {
 
     }
 
-    /**
-     * Returns the packet info object which has packetID and a timestamp of the packet
-     *
-     * @param packet - Raw packet as input
-     * @return packetinfo
-     */
     @Override
     public PacketInfo getPacketInfo(Packet packet) {
+
         String ether = ByteOperation.getEtherType(packet.header);
 
         /*
@@ -55,13 +38,11 @@ public class PacketFilterSpirent extends PacketFilterBase {
         PacketInfo info = null;
 
         if (ether.equals(Constants.VLAN)) {
-            byte[] packetIDSlice = Arrays.copyOfRange(packet.data, 8, 10);
+            byte[] packetIDSlice = Arrays.copyOfRange(packet.data, 14, 18);
             long packetID = ByteOperation.getLongID(packetIDSlice);
-            //System.out.println("Ether Type: " + ether + " Packet ID:" + packetID);
             long res = convertTimeUnit(isHw, config.getTimeUnit(), packet.sec, packet.usec);
             info = new PacketInfo(packetID, new TimeStamp(packet.sec, packet.usec, res));
         }
-
         return info;
     }
 }
