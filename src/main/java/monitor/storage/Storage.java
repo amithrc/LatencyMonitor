@@ -29,6 +29,11 @@ public class Storage {
         table.remove(packetID);
     }
 
+    synchronized public TimeStampContainer getTimeStamp(long packetID) {
+        return table.get(packetID);
+
+    }
+
 
     synchronized public void addPacket(Long id, TimeStamp timeStamp, boolean isSender) {
 

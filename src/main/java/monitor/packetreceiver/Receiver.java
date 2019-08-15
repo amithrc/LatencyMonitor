@@ -42,7 +42,7 @@ public class Receiver implements PacketReceiver {
 
 
             if (table.hasPacket(packetInfo.getPacketID())) {
-                TimeStamp T1 = table.getTable().get(packetID).getT1();
+                TimeStamp T1 = table.getTimeStamp(packetID).getT1();
 
                 if (config.isStdOutEnabled()) {
                     System.out.println("Packet received on receiver Interface: " + packetID);

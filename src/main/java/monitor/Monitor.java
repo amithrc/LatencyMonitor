@@ -146,6 +146,8 @@ public class Monitor {
                 ExecutorService executor = Executors.newFixedThreadPool(2);
                 executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
                 executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
+
+
             }
         }
 

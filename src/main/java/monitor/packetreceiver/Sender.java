@@ -45,7 +45,7 @@ public class Sender implements PacketReceiver {
             TimeStamp T1 = packetInfo.getTimeStamp();
 
             if (table.hasPacket(packetID)) {
-                TimeStamp T2 = table.getTable().get(packetID).getT2();
+                TimeStamp T2 = table.getTimeStamp(packetID).getT2();
                 if (config.isStdOutEnabled()) {
                     System.out.println("Packet received on sender Interface: " + packetID);
                     System.out.println("Packet ID: " + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString());
