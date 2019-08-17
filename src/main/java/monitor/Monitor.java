@@ -100,7 +100,8 @@ public class Monitor {
             SetupInterface captureinterface = new SetupInterface(config.getInterfaceSender(), config.getTimeStampType(), log);
             JpcapCaptor captureCaptor = captureinterface.getCaptor();
 
-            ExecutorService executor = Executors.newFixedThreadPool(1);
+            ExecutorService executor = Executors.newFixedThreadPool(2);
+            executor.submit(new TrafficGenerator(config));
             executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, getFilterType())));
         }
 

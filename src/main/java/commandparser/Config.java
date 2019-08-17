@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 /**
  * Config class which holds all the command line options and its values
+ *
  * @author Amith
  */
 
@@ -73,6 +74,9 @@ public class Config {
     @Parameter(names = {"--uid-pattern"}, description = "Unique ID pattern")
     private String uidpattern = "ffff";
 
+    @Parameter(names = {"--file-name"}, description = "Filename to write the Stats")
+    private String statsfile = "LatencyStats";
+
     @Parameter(names = {"-g", "--generate-traffic"}, description = "Generates the Ethernet traffic")
     private Boolean isTrafficGen = false;
 
@@ -101,6 +105,10 @@ public class Config {
             return TimeUnit.NANO_SEC;
         }
         return TimeUnit.MICRO_SEC;
+    }
+
+    public String getStatsfile() {
+        return statsfile;
     }
 
     public String getInterfaceReceiver() {
