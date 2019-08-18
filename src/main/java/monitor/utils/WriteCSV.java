@@ -19,16 +19,27 @@ public class WriteCSV {
     private String fname = null;
     private CSVWriter csvWriter = null;
 
+    /**
+     * Constructors opens the csv file and writes the header
+     *
+     * @param header - header for the CSV file
+     * @param fname  - Takes filename to create
+     */
     public WriteCSV(String[] header, String fname) {
         this.header = header;
         this.fname = fname;
         try {
-            csvWriter = new CSVWriter(new BufferedWriter(new FileWriter(new File(fname+".csv"))));
+            csvWriter = new CSVWriter(new BufferedWriter(new FileWriter(new File(fname + ".csv"))));
         } catch (IOException e) {
             e.printStackTrace();
         }
         csvWriter.writeNext(header);
     }
+
+    /**
+     *
+     * @param data
+     */
 
     public void writeLine(String[] data) {
         csvWriter.writeNext(data);

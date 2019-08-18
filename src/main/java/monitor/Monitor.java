@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 /**
  * This class handles all the features.
  * if --monitor option is enabled, it will start monitoring
+ *
+ * @author Amith
  */
 
 public class Monitor {
@@ -34,25 +36,53 @@ public class Monitor {
     private Helper helper = null;
     private Logger log = null;
 
+    /**
+     * Constructors that takes the config object
+     *
+     * @param config - config object that takes the command line arguments
+     */
     public Monitor(Config config) {
         this.config = config;
         helper = new Helper(config);
         log = config.getLogger();
     }
 
+    /**
+     * Prints the Usage
+     */
     public void usage() {
         config.usage();
     }
 
+    private void shutdownStatus() {
+        System.out.println("\n");
+        System.out.println("Waiting for the threads to complete..");
+        System.out.println("Shutting down..");
+    }
 
+    /**
+     * Writes the debug info.
+     */
     private void printConfigInfo() {
         log.log(Level.FINEST, "*****************************Config Information**********************************");
         log.log(Level.FINEST, "Sender Interface: " + config.getInterfaceSender());
         log.log(Level.FINEST, "Receiver Interface: " + config.getInterfaceSender());
         String res = config.getTimeStampType().toString().equalsIgnoreCase("hardware") ? "hardware" : "software";
         log.log(Level.FINEST, "Time-stamp-type: " + res);
+        log.log(Level.FINEST, "Time Interval: " + config.getTimeInterval() + "min");
+        log.log(Level.FINEST, "File created:" + config.getStatsfile());
+        log.log(Level.FINEST, "Verbose Enabled:" + config.isVerboseEnabled());
+        log.log(Level.FINEST, "Stdout Enabled:" + config.isStdOutEnabled());
+        log.log(Level.FINEST, "Monitor Enabled:" + config.IsMonitorEnabled());
+
     }
 
+    /**
+     * This method returns how to filter the packet
+     * to find the packet ID for each packet
+     *
+     * @return - reference back to the filter
+     */
     private PacketFilterBase getFilterType() {
 
         if (config.getFilterType() == 1) {
@@ -71,7 +101,6 @@ public class Monitor {
      */
 
     public void handle() throws IOException {
-
 
         if (config.isVerboseEnabled())
             printConfigInfo();
@@ -102,10 +131,25 @@ public class Monitor {
 
             ExecutorService executor = Executors.newFixedThreadPool(2);
             executor.submit(new TrafficGenerator(config));
+
             executor.submit(() -> captureCaptor.loopPacket(-1, new CaptureTraffic(config, getFilterType())));
+
+            try {
+                Thread.sleep(config.getTimeInterval() * 60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            captureCaptor.breakLoop();
+            shutdownStatus();
+            executor.shutdown();
+            System.exit(1);
+
         }
 
-
+        /*
+            This setups the network interface and starts monitoring the packet
+         */
         if (config.IsMonitorEnabled()) {
 
             log.log(Level.FINEST, "Started Latency Monitor...");
@@ -119,37 +163,40 @@ public class Monitor {
 
             log.log(Level.FINEST, "Sender interface:" + senderInterface.getInterfaceName() + "Receiver Interface:" + receiverInterface.getInterfaceName());
 
-
-            /*
-            Allocate Storage , this shared between two threads.
-            */
-            Storage storage = new Storage(log);
-
-            if (storage == null) {
-                log.log(Level.SEVERE, "Cannot allocate memory for storing the packets, exiting..");
-                System.exit(-1);
-            }
-
             /*
                 if --traffic-generator is enabled, programs creates the packets by adding FF FF FF FF the first 4 bytes in tge data payload by default.
                 Pattern can be overridden.
             */
 
-            PacketFilterBase filterBase = getFilterType();
-            PacketConfig packetConfig = new PacketConfig(storage, filterBase);
+            PacketConfig packetConfig = new PacketConfig(new Storage(log), getFilterType());
 
+            ExecutorService executor = null;
             if (config.isTrafficGen()) {
-                ExecutorService executor = Executors.newFixedThreadPool(3);
+                executor = Executors.newFixedThreadPool(3);
                 executor.submit(new TrafficGenerator(config));
                 executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
                 executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
             } else {
-                ExecutorService executor = Executors.newFixedThreadPool(2);
+                executor = Executors.newFixedThreadPool(2);
                 executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
                 executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
 
-
             }
+
+            /*
+                Run the monitor to the time specified in command line with --time-interval or -d ( in minutes)
+            */
+            try {
+                Thread.sleep(config.getTimeInterval() * 60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            senderCaptor.breakLoop();
+            receiverCaptor.breakLoop();
+            shutdownStatus();
+            executor.shutdown();
+            System.exit(1);
         }
 
         /*

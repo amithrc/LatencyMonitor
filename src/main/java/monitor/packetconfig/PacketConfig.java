@@ -1,5 +1,6 @@
 package main.java.monitor.packetconfig;
 
+import com.opencsv.CSVWriter;
 import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.storage.Storage;
 
@@ -20,6 +21,7 @@ public class PacketConfig {
     private Storage storage = null;
     private PacketFilterBase packetFilter = null;
     private BufferedWriter writer = null;
+    private CSVWriter csvWriter = null;
 
 
     /**
@@ -66,4 +68,7 @@ public class PacketConfig {
         return packetFilter;
     }
 
+    public CSVWriter getCsvWriter() {
+        return csvWriter;
+    }
 }

@@ -47,7 +47,7 @@ public class TrafficGenerator implements Runnable {
         JpcapSender sender = senderInterface.getSender();
 
 
-        for (long i = 0; i < numberOfPackets; i++) {
+        for (long i = 0; ; i++) {
             Packet packet = new Packet();
 
             byte[] mac = ByteOperation.getMacHeader(senderInterface.getSourceMac());

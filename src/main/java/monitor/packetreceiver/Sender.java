@@ -8,32 +8,44 @@ import main.java.monitor.packetconfig.PacketConfig;
 import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.packetconfig.PacketInfo;
 import main.java.monitor.storage.Storage;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
+import main.java.monitor.utils.WriteCSV;
 
 
+/**
+ * Captures all the traffic received on the sender interface, uses one of the packet filter
+ * to capture the interested packet.
+ *
+ * @author Amith
+ */
 public class Sender implements PacketReceiver {
 
     private Config config = null;
 
     private Storage table = null;
     private PacketFilterBase filter = null;
-    private BufferedWriter writer = null;
+    private WriteCSV csvWriter = null;
 
 
     public Sender(Config config, PacketConfig packetConfig) {
         this.config = config;
         this.table = packetConfig.getStorage();
         this.filter = packetConfig.getPacketFilter();
-        this.writer = packetConfig.getWriter();
+        String[] header = null;
+
+        if (config.isStdOutEnabled()) {
+            header = new String[]{"packetid", "latency", "unit", "STI/sec", "STI/subsec", "STI/convertedunit", "RTI/sec", "RTI/subsec", "RTI/convertedunit"};
+
+        } else {
+            header = new String[]{"packetid", "latency", "unit"};
+        }
+        csvWriter = new WriteCSV(header, config.getStatsfile());
     }
 
     /**
      * This methods loops through all the packets that receives on the interface
      * and filters the interested packet. Calling addPacket will add the timestamp T1 for the packet
      *
-     * @param packet
+     * @param packet - Gets each packet out of the interface
      */
     @Override
     public void receivePacket(Packet packet) {
@@ -46,17 +58,32 @@ public class Sender implements PacketReceiver {
 
             if (table.hasPacket(packetID)) {
                 TimeStamp T2 = table.getTimeStamp(packetID).getT2();
-                if (config.isStdOutEnabled()) {
-                    System.out.println("Packet received on sender Interface: " + packetID);
-                    System.out.println("Packet ID: " + packetID + " RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString());
+
+                String[] data = null;
+                String pid = String.valueOf(packetID);
+                String latency = String.valueOf((T2.getResultTimeUnit() - T1.getResultTimeUnit()));
+                String unit = config.getUnitString();
+
+
+                if (config.isVerboseEnabled()) {
+                    data = new String[]{pid, latency, unit};
+
+                } else {
+                    String stisec = String.valueOf(T1.getSeconds());
+                    String stisubsec = String.valueOf(T1.getMicroNanoseconds());
+                    String sticonverted = String.valueOf(T1.getResultTimeUnit());
+
+                    String rtisec = String.valueOf(T2.getSeconds());
+                    String rtisubsec = String.valueOf(T2.getMicroNanoseconds());
+                    String rticonverted = String.valueOf(T2.getResultTimeUnit());
+                    data = new String[]{pid, latency, unit, stisec, stisubsec, sticonverted, rtisec, rtisubsec, rticonverted};
                 }
-                try {
-                    writer.write("PacketID:" + packetID + "," + "RTT:" + (T2.getResultTimeUnit() - T1.getResultTimeUnit()) + " " + config.getUnitString() + "\n");
-                    writer.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                csvWriter.writeLine(data);
                 table.removePacket(packetID);
+
+                if (config.isStdOutEnabled()) {
+                    System.out.println("sender Interface/ Packet ID: " + pid + " RTT:" + latency + " " + config.getUnitString());
+                }
 
             } else {
                 table.addPacket(packetID, T1, true);
