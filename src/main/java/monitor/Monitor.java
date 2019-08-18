@@ -168,18 +168,18 @@ public class Monitor {
                 Pattern can be overridden.
             */
 
-            PacketConfig packetConfig = new PacketConfig(new Storage(log), getFilterType());
+            PacketConfig packetConfig = new PacketConfig(new Storage(log), getFilterType(), config);
 
             ExecutorService executor = null;
             if (config.isTrafficGen()) {
                 executor = Executors.newFixedThreadPool(3);
                 executor.submit(new TrafficGenerator(config));
-                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
-                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(packetConfig)));
+                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(packetConfig)));
             } else {
                 executor = Executors.newFixedThreadPool(2);
-                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(config, packetConfig)));
-                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(config, packetConfig)));
+                executor.submit(() -> senderCaptor.loopPacket(-1, new Sender(packetConfig)));
+                executor.submit(() -> receiverCaptor.loopPacket(-1, new Receiver(packetConfig)));
 
             }
 

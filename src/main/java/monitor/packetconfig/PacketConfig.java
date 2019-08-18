@@ -1,8 +1,10 @@
 package main.java.monitor.packetconfig;
 
 import com.opencsv.CSVWriter;
+import main.java.commandparser.Config;
 import main.java.monitor.packetconfig.filter.PacketFilterBase;
 import main.java.monitor.storage.Storage;
+import main.java.monitor.utils.WriteCSV;
 
 
 import java.io.BufferedWriter;
@@ -20,8 +22,8 @@ public class PacketConfig {
 
     private Storage storage = null;
     private PacketFilterBase packetFilter = null;
-    private BufferedWriter writer = null;
-    private CSVWriter csvWriter = null;
+    private WriteCSV csvWriter = null;
+    private Config config = null;
 
 
     /**
@@ -30,24 +32,18 @@ public class PacketConfig {
      * @param storage
      * @param packetFilter
      */
-    public PacketConfig(Storage storage, PacketFilterBase packetFilter) {
+    public PacketConfig(Storage storage, PacketFilterBase packetFilter, Config config) {
         this.storage = storage;
         this.packetFilter = packetFilter;
+        this.config = config;
 
-        try {
-            this.writer = new BufferedWriter(new FileWriter(new File("latencyFile.csv")));
-        } catch (IOException io) {
-            io.getStackTrace();
+        String[] header = null;
+        if (config.isVerboseEnabled()) {
+            header = new String[]{"packetid", "latency", "unit", "STI/sec", "STI/subsec", "STI/convertedunit", "RTI/sec", "RTI/subsec", "RTI/convertedunit"};
+        } else {
+            header = new String[]{"packetid", "latency", "unit"};
         }
-
-    }
-
-    /**
-     * @return Returns the writer object to write to the file
-     */
-
-    public BufferedWriter getWriter() {
-        return writer;
+        this.csvWriter = new WriteCSV(header, config.getStatsfile());
     }
 
     /**
@@ -68,7 +64,21 @@ public class PacketConfig {
         return packetFilter;
     }
 
-    public CSVWriter getCsvWriter() {
+    /**
+     * Returns the CSV writer object
+     *
+     * @return - csvwriter
+     */
+    public WriteCSV getCsvWriter() {
         return csvWriter;
+    }
+
+    /**
+     * Returns the config object which holds reference to all values
+     *
+     * @return - config object
+     */
+    public Config getConfig() {
+        return config;
     }
 }

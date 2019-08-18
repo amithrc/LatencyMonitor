@@ -11,7 +11,6 @@ import main.java.monitor.storage.Storage;
 import main.java.monitor.utils.WriteCSV;
 
 
-
 public class Receiver implements PacketReceiver {
 
 
@@ -21,21 +20,11 @@ public class Receiver implements PacketReceiver {
     private PacketFilterBase filter = null;
     private WriteCSV csvWriter = null;
 
-    public Receiver(Config config, PacketConfig packetConfig) {
-        this.config = config;
+    public Receiver(PacketConfig packetConfig) {
+        this.config = packetConfig.getConfig();
         this.table = packetConfig.getStorage();
         this.filter = packetConfig.getPacketFilter();
-
-
-        String[] header = null;
-
-        if (config.isStdOutEnabled()) {
-            header = new String[]{"packetid", "latency", "unit", "STI/sec", "STI/subsec", "STI/convertedunit", "RTI/sec", "RTI/subsec", "RTI/convertedunit"};
-
-        } else {
-            header = new String[]{"packetid", "latency", "unit"};
-        }
-        csvWriter = new WriteCSV(header, config.getStatsfile());
+        csvWriter = packetConfig.getCsvWriter();
     }
 
     @Override
@@ -57,7 +46,7 @@ public class Receiver implements PacketReceiver {
                 String unit = config.getUnitString();
 
 
-                if (config.isVerboseEnabled()) {
+                if (!config.isVerboseEnabled()) {
                     data = new String[]{pid, latency, unit};
 
                 } else {
