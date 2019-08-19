@@ -4,6 +4,8 @@ import jpcap.packet.Packet;
 import main.java.commandparser.Config;
 import main.java.monitor.packetconfig.PacketInfo;
 
+import java.util.Arrays;
+
 
 /**
  * Abstract PacketFilter class which will return the PacketInfo object
@@ -12,6 +14,15 @@ import main.java.monitor.packetconfig.PacketInfo;
  */
 
 abstract public class PacketFilterBase {
+
+    public byte[] extractPacketID(byte[] data, Config.HeaderType type) {
+        if (type == Config.HeaderType.IPV4_header) {
+            return Arrays.copyOfRange(data, 16, 20);
+        } else if (type == Config.HeaderType.TCP_HEADER) {
+            return Arrays.copyOfRange(data, 28, 32);
+        }
+        return null;
+    }
 
 
     /**

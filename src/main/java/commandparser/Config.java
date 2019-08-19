@@ -32,6 +32,11 @@ public class Config {
         NANO_SEC,
     }
 
+    public enum HeaderType {
+        TCP_HEADER,
+        IPV4_header,
+    }
+
 
     @Parameter(names = {"-is", "--interface-sender"}, description = "Tap line from the sender", required = false)
     private String interfaceSender;
@@ -69,6 +74,9 @@ public class Config {
 
     @Parameter(names = {"-t", "--time-unit"}, description = "Time unit (ms,us,ns)")
     private String timeUnit = "us";
+
+    @Parameter(names = {"--header-type"}, description = "Header type (ipv4 or tcp")
+    private String headerType = "tcp";
 
 
     @Parameter(names = {"--uid-pattern"}, description = "Unique ID pattern")
@@ -283,6 +291,13 @@ public class Config {
      */
     public int getTimeInterval() {
         return timeInterval;
+    }
+
+    public HeaderType getHeaderType() {
+        if (headerType.equalsIgnoreCase("ipv4")) {
+            return HeaderType.IPV4_header;
+        }
+        return HeaderType.TCP_HEADER;
     }
 
     /**

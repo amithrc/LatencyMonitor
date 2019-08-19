@@ -38,8 +38,8 @@ public class PacketFilterUpStream extends PacketFilterBase {
 
         PacketInfo info = null;
 
-        if (ether.equals(Constants.VLAN)) {
-            byte[] packetIDSlice = Arrays.copyOfRange(packet.data, 16, 20);
+        if (ether.equals(Constants.IPV4)) {
+            byte[] packetIDSlice = Arrays.copyOfRange(packet.data, 12, 16);
             long packetID = ByteOperation.getLongID(packetIDSlice);
             long res = convertTimeUnit(isHw, config.getTimeUnit(), packet.sec, packet.usec);
             info = new PacketInfo(packetID, new TimeStamp(packet.sec, packet.usec, res));
