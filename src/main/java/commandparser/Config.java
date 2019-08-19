@@ -63,8 +63,9 @@ public class Config {
     @Parameter(names = {"-S", "--sleep-time"}, description = "Thread sleep time, relevant to generate traffic")
     private int threadSleepTime = 1;
 
-    @Parameter(names = {"-f", "--filter-type"}, description = "Filter type to apply, Spirent type 1, Traffic Generator 2, Spirent type 3")
-    private int filterType = 1;
+    @Parameter(names = {"-f", "--filter-type"}, description = "An integer number that indicates the filter type,3-Downstream traffic(Vlan 500)" +
+            "4 - Upstream traffic (No vlans)")
+    private int filterType = 3;
 
     @Parameter(names = {"-t", "--time-unit"}, description = "Time unit (ms,us,ns)")
     private String timeUnit = "us";

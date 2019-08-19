@@ -3,10 +3,7 @@ package main.java.monitor;
 
 import jpcap.JpcapCaptor;
 import main.java.monitor.packetconfig.PacketConfig;
-import main.java.monitor.packetconfig.filter.PacketFilterBase;
-import main.java.monitor.packetconfig.filter.PacketFilterSpirent;
-import main.java.monitor.packetconfig.filter.PacketFilterSpirentType2;
-import main.java.monitor.packetconfig.filter.PacketFilterTrafficGenerator;
+import main.java.monitor.packetconfig.filter.*;
 import main.java.monitor.packetreceiver.CaptureTraffic;
 import main.java.monitor.packetreceiver.Receiver;
 import main.java.monitor.packetreceiver.Sender;
@@ -90,7 +87,9 @@ public class Monitor {
         } else if (config.getFilterType() == 2) {
             return new PacketFilterTrafficGenerator(config);
         } else if (config.getFilterType() == 3) {
-            return new PacketFilterSpirentType2(config);
+            return new PacketFilterSpirentDownStream(config);
+        } else if (config.getFilterType() == 4) {
+            return new PacketFilterUpStream(config);
         }
         return null;
     }

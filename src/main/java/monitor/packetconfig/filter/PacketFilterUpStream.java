@@ -1,3 +1,4 @@
+
 package main.java.monitor.packetconfig.filter;
 
 import jpcap.packet.Packet;
@@ -10,13 +11,13 @@ import main.java.monitor.utils.Constants;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-public class PacketFilterSpirentType2 extends PacketFilterBase {
+public class PacketFilterUpStream extends PacketFilterBase {
 
     private Config config = null;
     private Logger logger = null;
     private boolean isHw = false;
 
-    public PacketFilterSpirentType2(Config config) {
+    public PacketFilterUpStream(Config config) {
         this.config = config;
 
         if (config.getTimeStampType() == Config.TimeStampType.HARDWARE_TIME_STAMP) {
