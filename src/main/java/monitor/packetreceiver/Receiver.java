@@ -58,7 +58,7 @@ public class Receiver implements PacketReceiver {
                     String rtisubsec = String.valueOf(T2.getMicroNanoseconds());
                     String rticonverted = String.valueOf(T2.getResultTimeUnit());
 
-                    data = new String[]{pid, latency, unit, stisec, stisubsec, sticonverted, rtisec, rtisubsec, rticonverted};
+                    data = new String[]{pid, latency, unit, stisec, stisubsec, sticonverted, rtisec, rtisubsec, rticonverted, config.getHeaderType().toString()};
                 }
                 csvWriter.writeLine(data);
                 table.removePacket(packetID);

@@ -87,9 +87,7 @@ public class Monitor {
         } else if (config.getFilterType() == 2) {
             return new PacketFilterTrafficGenerator(config);
         } else if (config.getFilterType() == 3) {
-            return new PacketFilterSpirentDownStream(config);
-        } else if (config.getFilterType() == 4) {
-            return new PacketFilterUpStream(config);
+            return new PacketFIlterSpirentStream(config);
         }
         return null;
     }

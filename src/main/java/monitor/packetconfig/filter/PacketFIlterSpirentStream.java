@@ -9,13 +9,13 @@ import main.java.monitor.utils.Constants;
 
 import java.util.logging.Logger;
 
-public class PacketFilterSpirentDownStream extends PacketFilterBase {
+public class PacketFIlterSpirentStream extends PacketFilterBase {
 
     private Config config = null;
     private Logger logger = null;
     private boolean isHw = false;
 
-    public PacketFilterSpirentDownStream(Config config) {
+    public PacketFIlterSpirentStream(Config config) {
         this.config = config;
 
         if (config.getTimeStampType() == Config.TimeStampType.HARDWARE_TIME_STAMP) {

@@ -15,11 +15,25 @@ import java.util.Arrays;
 
 abstract public class PacketFilterBase {
 
-    public byte[] extractPacketID(byte[] data, Config.HeaderType type) {
-        if (type == Config.HeaderType.IPV4_header) {
+    /**
+     * Returns the packet ID from the data buffer (Packet data)
+     * Filter type 3 indicates Downstream data, this data has VLAN tagging, So it include 4 bytes in the data payload
+     * Filter type 4 indicates Upstream capture , this does not have VLAN information.
+     *
+     * @param data       Data buffer of each packet
+     * @param type       Header Type used, packet can have just ipv4 header with Source IP increments or TCP header with Sequence number increments
+     * @param filterType Downstream capture or upstream capture
+     * @return
+     */
+    byte[] extractPacketID(byte[] data, Config.HeaderType type, int filterType) {
+        if (type == Config.HeaderType.IPV4_header && filterType == 3) {
             return Arrays.copyOfRange(data, 16, 20);
-        } else if (type == Config.HeaderType.TCP_HEADER) {
+        } else if (type == Config.HeaderType.TCP_HEADER && filterType == 3) {
             return Arrays.copyOfRange(data, 28, 32);
+        } else if (type == Config.HeaderType.IPV4_header && filterType == 4) {
+            return Arrays.copyOfRange(data, 12, 16);
+        } else if (type == Config.HeaderType.TCP_HEADER && filterType == 4) {
+            return Arrays.copyOfRange(data, 24, 28);
         }
         return null;
     }

@@ -24,7 +24,6 @@ public class PacketFilterUpStream extends PacketFilterBase {
             isHw = true;
         }
         this.logger = config.getLogger();
-
     }
 
     @Override
