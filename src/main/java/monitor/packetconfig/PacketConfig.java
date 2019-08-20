@@ -39,7 +39,7 @@ public class PacketConfig {
 
         String[] header = null;
         if (config.isVerboseEnabled()) {
-            header = new String[]{"packetid", "latency", "unit", "STI/sec", "STI/subsec", "STI/convertedunit", "RTI/sec", "RTI/subsec", "RTI/convertedunit", "headertype"};
+            header = new String[]{"packetid", "latency", "unit", "STI/sec", "STI/subsec", "STI/convertedunit", "RTI/sec", "RTI/subsec", "RTI/convertedunit", "headertype", "framesize"};
         } else {
             header = new String[]{"packetid", "latency", "unit"};
         }
