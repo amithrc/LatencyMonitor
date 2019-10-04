@@ -1,12 +1,13 @@
 package main.java.monitor.packetconfig.filter;
 
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.PacketInfo;
 import main.java.monitor.utils.ByteOperation;
 import main.java.monitor.utils.Constants;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class PacketFilterSpirentDownStream extends PacketFilterBase {
@@ -29,12 +30,14 @@ public class PacketFilterSpirentDownStream extends PacketFilterBase {
      * Gets the packet
      *
      * @param packet - Raw packet as input
-     * @return Packet info which holds the packet ID and a timestamp
+     * @return JpcapPacket info which holds the packet ID and a timestamp
      */
     @Override
-    public PacketInfo getPacketInfo(Packet packet) {
+    public PacketInfo getPacketInfo(JpcapPacket packet) {
 
-        String ether = ByteOperation.getEtherType(packet.header);
+        String ether = ByteOperation.getEtherType(packet.data);
+
+        byte [] data = Arrays.copyOfRange(packet.data, 14, packet.data.length);
 
         /*
         if the ether type is of type VLAN, this is the packet of interest
@@ -43,7 +46,7 @@ public class PacketFilterSpirentDownStream extends PacketFilterBase {
         PacketInfo info = null;
 
         if (ether.equals(Constants.VLAN)) {
-            byte[] packetIDSlice = extractPacketID(packet.data, config.getHeaderType(), config.getFilterType());
+            byte[] packetIDSlice = extractPacketID(data, config.getHeaderType(), config.getFilterType());
             if (packetIDSlice == null) {
                 System.out.println("Cannot extract the packet");
                 System.exit(-1);

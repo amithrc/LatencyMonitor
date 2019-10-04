@@ -1,7 +1,7 @@
 package main.java.monitor.packetreceiver;
 
 import jpcap.PacketReceiver;
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.filter.PacketFilterBase;
@@ -25,7 +25,7 @@ public class CaptureTraffic implements PacketReceiver {
     }
 
     @Override
-    public void receivePacket(Packet packet) {
+    public void receivePacket(JpcapPacket packet) {
         PacketInfo info = filter.getPacketInfo(packet);
         if (info != null) {
             TimeStamp t = info.getTimeStamp();

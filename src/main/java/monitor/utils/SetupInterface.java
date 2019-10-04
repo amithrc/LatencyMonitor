@@ -1,5 +1,6 @@
 package main.java.monitor.utils;
 
+import jpcap.HwTsFilterConfig;
 import jpcap.JpcapCaptor;
 import jpcap.JpcapSender;
 import jpcap.NetworkInterface;
@@ -63,15 +64,19 @@ public class SetupInterface {
     public JpcapCaptor getCaptor() {
         boolean timestamptype = false;
 
+        HwTsFilterConfig.Timestamp_Rx_Filter rxFilt = HwTsFilterConfig.Timestamp_Rx_Filter.HWTSTAMP_FILTER_NONE;
+        HwTsFilterConfig.Timestamp_Tx_Filter txFilt = HwTsFilterConfig.Timestamp_Tx_Filter.HWTSTAMP_TX_OFF;
         if (this.type == Config.TimeStampType.HARDWARE_TIME_STAMP) {
             timestamptype = true;
+            rxFilt = HwTsFilterConfig.Timestamp_Rx_Filter.HWTSTAMP_FILTER_ALL;
+            txFilt = HwTsFilterConfig.Timestamp_Tx_Filter.HWTSTAMP_TX_ON;
         }
         JpcapCaptor captor = null;
         if (this.networkInterface != null) {
 
             try {
-                captor = JpcapCaptor.openDevice(this.networkInterface, 10000,
-                        true, 1, timestamptype);
+
+                captor = JpcapCaptor.openDevice(this.networkInterface, 10000, true, 1, rxFilt, txFilt);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -87,11 +92,14 @@ public class SetupInterface {
     public JpcapSender getSender() {
         try {
             boolean timestamptype = false;
-
+            HwTsFilterConfig.Timestamp_Rx_Filter rxFilt = HwTsFilterConfig.Timestamp_Rx_Filter.HWTSTAMP_FILTER_NONE;
+            HwTsFilterConfig.Timestamp_Tx_Filter txFilt = HwTsFilterConfig.Timestamp_Tx_Filter.HWTSTAMP_TX_OFF;
             if (this.type == Config.TimeStampType.HARDWARE_TIME_STAMP) {
                 timestamptype = true;
+                rxFilt = HwTsFilterConfig.Timestamp_Rx_Filter.HWTSTAMP_FILTER_ALL;
+                txFilt = HwTsFilterConfig.Timestamp_Tx_Filter.HWTSTAMP_TX_ON;
             }
-            return JpcapSender.openDevice(networkInterface, timestamptype);
+            return JpcapSender.openDevice(networkInterface, rxFilt, txFilt);
         } catch (IOException e) {
             e.printStackTrace();
         }

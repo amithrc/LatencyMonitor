@@ -1,6 +1,6 @@
 package main.java.monitor.packetconfig.filter;
 
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.packetconfig.PacketInfo;
 
@@ -16,7 +16,7 @@ import java.util.Arrays;
 abstract public class PacketFilterBase {
 
     /**
-     * Returns the packet ID from the data buffer (Packet data)
+     * Returns the packet ID from the data buffer (JpcapPacket data)
      * Filter type 3 indicates Downstream data, this data has VLAN tagging, So it include 4 bytes in the data payload
      * Filter type 4 indicates Upstream capture , this does not have VLAN information.
      *
@@ -72,5 +72,5 @@ abstract public class PacketFilterBase {
      * @param packet - Raw packet as input
      * @return - PacketInfo object
      */
-    abstract public PacketInfo getPacketInfo(Packet packet);
+    abstract public PacketInfo getPacketInfo(JpcapPacket packet);
 }

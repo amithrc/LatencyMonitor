@@ -1,6 +1,6 @@
 package main.java.monitor.packetconfig.filter;
 
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.PacketInfo;
@@ -45,8 +45,10 @@ public class PacketFilterSpirent extends PacketFilterBase {
      * @return packetinfo
      */
     @Override
-    public PacketInfo getPacketInfo(Packet packet) {
-        String ether = ByteOperation.getEtherType(packet.header);
+    public PacketInfo getPacketInfo(JpcapPacket packet) {
+        String ether = ByteOperation.getEtherType(packet.data);
+
+        byte [] data = Arrays.copyOfRange(packet.data, 14, packet.data.length);
 
         /*
         if the ether type is of type VLAN, this is the packet of interest
@@ -55,7 +57,7 @@ public class PacketFilterSpirent extends PacketFilterBase {
         PacketInfo info = null;
 
         if (ether.equals(Constants.VLAN)) {
-            byte[] packetIDSlice = Arrays.copyOfRange(packet.data, 8, 10);
+            byte[] packetIDSlice = Arrays.copyOfRange(data, 8, 10);
             long packetID = ByteOperation.getLongID(packetIDSlice);
             //System.out.println("Ether Type: " + ether + " Packet ID:" + packetID);
             long res = convertTimeUnit(isHw, config.getTimeUnit(), packet.sec, packet.usec);

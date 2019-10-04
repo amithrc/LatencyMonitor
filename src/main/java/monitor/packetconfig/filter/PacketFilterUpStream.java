@@ -1,7 +1,7 @@
 
 package main.java.monitor.packetconfig.filter;
 
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.PacketInfo;
@@ -27,9 +27,9 @@ public class PacketFilterUpStream extends PacketFilterBase {
     }
 
     @Override
-    public PacketInfo getPacketInfo(Packet packet) {
-
-        String ether = ByteOperation.getEtherType(packet.header);
+    public PacketInfo getPacketInfo(JpcapPacket packet) {
+        String ether = ByteOperation.getEtherType(packet.data);
+        byte [] data = Arrays.copyOfRange(packet.data, 14, packet.data.length);
 
         /*
         if the ether type is of type VLAN, this is the packet of interest
@@ -38,7 +38,7 @@ public class PacketFilterUpStream extends PacketFilterBase {
         PacketInfo info = null;
 
         if (ether.equals(Constants.IPV4)) {
-            byte[] packetIDSlice = Arrays.copyOfRange(packet.data, 12, 16);
+            byte[] packetIDSlice = Arrays.copyOfRange(data, 12, 16);
             long packetID = ByteOperation.getLongID(packetIDSlice);
             long res = convertTimeUnit(isHw, config.getTimeUnit(), packet.sec, packet.usec);
             info = new PacketInfo(packetID, new TimeStamp(packet.sec, packet.usec, res));

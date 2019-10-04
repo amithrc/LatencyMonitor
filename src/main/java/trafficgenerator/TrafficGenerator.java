@@ -2,7 +2,7 @@ package main.java.trafficgenerator;
 
 
 import jpcap.JpcapSender;
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.utils.SetupInterface;
 import main.java.monitor.utils.ByteOperation;
@@ -48,7 +48,7 @@ public class TrafficGenerator implements Runnable {
 
 
         for (long i = 0; ; i++) {
-            Packet packet = new Packet();
+            JpcapPacket packet = new JpcapPacket();
 
             byte[] mac = ByteOperation.getMacHeader(senderInterface.getSourceMac());
             byte[] uid = ByteOperation.getBytes(uidpattern);

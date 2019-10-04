@@ -1,7 +1,7 @@
 package main.java.monitor.packetreceiver;
 
 import jpcap.PacketReceiver;
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.PacketConfig;
@@ -40,7 +40,7 @@ public class Sender implements PacketReceiver {
      * @param packet - Gets each packet out of the interface
      */
     @Override
-    public void receivePacket(Packet packet) {
+    public void receivePacket(JpcapPacket packet) {
 
         PacketInfo packetInfo = filter.getPacketInfo(packet);
 

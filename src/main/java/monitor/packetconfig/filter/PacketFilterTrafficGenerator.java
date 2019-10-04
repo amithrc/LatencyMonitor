@@ -1,6 +1,6 @@
 package main.java.monitor.packetconfig.filter;
 
-import jpcap.packet.Packet;
+import jpcap.JpcapPacket;
 import main.java.commandparser.Config;
 import main.java.monitor.container.TimeStamp;
 import main.java.monitor.packetconfig.PacketInfo;
@@ -41,12 +41,12 @@ public class PacketFilterTrafficGenerator extends PacketFilterBase {
      */
 
     @Override
-    public PacketInfo getPacketInfo(Packet packet) {
-
-        byte[] uuidSlice = Arrays.copyOfRange(packet.data, 0, config.getUidLength());
-        byte[] iidSlice = Arrays.copyOfRange(packet.data, config.getUidLength(), config.getUidLength() + 8);
+    public PacketInfo getPacketInfo(JpcapPacket packet) {
+        byte [] data = Arrays.copyOfRange(packet.data, 14, packet.data.length);
+        byte[] uuidSlice = Arrays.copyOfRange(data, 0, config.getUidLength());
+        byte[] iidSlice = Arrays.copyOfRange(data, config.getUidLength(), config.getUidLength() + 8);
         String uid = new String(uuidSlice);
-        String etherType = ByteOperation.getEtherType(packet.header);
+        String etherType = ByteOperation.getEtherType(packet.data);
 
         PacketInfo info = null;
 
